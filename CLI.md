@@ -123,7 +123,7 @@ slices bi create-from-file vm-cloudinit.json --experiment qkd-slice
 ## 9. Suppression d'une VM
 
 ```bash
-slices bi destroy interface-vm --experiment qkd-slice
+slices bi destroy vm-test --experiment qkd-slice
 slices bi destroy vm-cloudinit-test --experiment qkd-slice
 ```
 
