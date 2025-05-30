@@ -1,4 +1,4 @@
-# 💻 Mise en place de l'infrastructure SLICES-RI pour le projet QKD
+# Mise en place de l'infrastructure SLICES-RI pour le projet QKD
 
 ---
 
