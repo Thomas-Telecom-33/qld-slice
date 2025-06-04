@@ -1,38 +1,66 @@
-# OpenStack configuration
+# OpenStack VM Configuration Guide
 
 ---
 
-## 1. Fondamentals to create an OpenStack VM
-- Name
-- Flavor
-- Network
-- SSH key
-- Cloud-init
+## 1. Éléments essentiels pour créer une VM OpenStack
+
+Pour créer une instance OpenStack, les paramètres suivants sont nécessaires :
+
+- Nom de la machine
+- Type de machine (Flavor)
+- Réseau
+- Clé SSH
+- Fichier cloud-init (personnalisation au démarrage)
 
 ---
 
-## 2. Test avec un script de base
+## 2. Création d'une VM avec un script Python
 
-### 2.1 Openstack dashboard
-Dans le dashboard Openstack > Accès API > Télécharger le fichier RC D'openstack
-On a alors maintenant clouds.yaml qui sert à .... 
-Exemple de fichier clouds.yaml :
+### 2.1 Configuration de l'accès via le dashboard
 
+Dans le tableau de bord OpenStack :  
+**Projet > Accès API > Télécharger le fichier RC d'OpenStack**
 
+Cela permet d'obtenir un fichier `clouds.yaml` contenant la configuration nécessaire pour se connecter à OpenStack avec la bibliothèque `openstacksdk`.
 
-On a alors juste à rajouter la section mot de passe et son mot de passe.
+Il faut ensuite y ajouter manuellement la section `password`.
 
-### 2.2 Ajout du fichier clouds.yaml dans la VM 
+**Exemple simplifié de fichier `clouds.yaml`** :
+```yaml
+clouds:
+  openstack:
+    auth:
+      auth_url: 
+      username: your_username
+      project_name: your_project
+      user_domain_name: Default
+      project_domain_name: Default
+    region_name: RegionOne
+    interface: public
+    password: your_password
+```
+
+### 2.2 Ajout du fichier `clouds.yaml` dans la VM
+
+Créer le dossier de configuration et y placer le fichier :
+```bash
 mkdir -p ~/.config/openstack
 nano ~/.config/openstack/clouds.yaml
-Puis coller le contenu
+```
 
-On installe également la bilbliotheque nécessaire
+Puis coller le contenu du fichier `clouds.yaml`.
+
+Installer la bibliothèque Python nécessaire :
+```bash
 pip install openstacksdk
+```
 
-### 2.3 Script test test_create_vm.py 
-On créer alors un script test avec les informations que nous connaissons concernant l'infrastructure que nous possédons.
+---
 
+### 2.3 Script Python de test : `test_create_vm.py`
+
+Ce script permet de créer une VM OpenStack en utilisant les paramètres définis :
+```bash
 import openstack
 import base64
 
@@ -42,13 +70,12 @@ IMAGE_NAME = ""
 FLAVOR_NAME = ""
 NETWORK_NAME = ""
 KEY_NAME = ""
-VM_NAME = ""
+VM_NAME = "VM_test"
 
 USERDATA = """#cloud-config
 ...
 package_update: true
 package_upgrade: true
-...
 """
 
 print("[INFO] Looking for components")
@@ -81,13 +108,12 @@ print(f"[INFO] VM {server.name} is ready (status={server.status})")
 for net_name, addresses in server.addresses.items():
     for addr in addresses:
         print(f"{net_name} → {addr['addr']} ({addr['OS-EXT-IPS:type']})")
-
-
-### Resultats
-
-Terminal : Confirmation que la VM est bien créee + accès SSH possible vers la VM
-
-OpenStack Dashboard : VM ajoutée à la liste des instances
-
+```
 ---
 
+### 2.4 Résultats attendus
+
+- **Terminal** : Affichage de l’état de la VM et de son adresse IP. Si tout se passe bien, un accès SSH est possible.
+- **OpenStack Dashboard** : La VM apparaît dans la liste des instances.
+
+---
