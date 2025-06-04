@@ -22,7 +22,7 @@ Exemple de fichier clouds.yaml :
 
 On a alors juste à rajouter la section mot de passe et son mot de passe.
 
-## 2.2 Ajout du fichier clouds.yaml dans la VM 
+### 2.2 Ajout du fichier clouds.yaml dans la VM 
 mkdir -p ~/.config/openstack
 nano ~/.config/openstack/clouds.yaml
 Puis coller le contenu
@@ -30,7 +30,7 @@ Puis coller le contenu
 On installe également la bilbliotheque nécessaire
 pip install openstacksdk
 
-## 2.3 Script test test_create_vm.py 
+### 2.3 Script test test_create_vm.py 
 On créer alors un script test avec les informations que nous connaissons concernant l'infrastructure que nous possédons.
 
 import openstack
@@ -82,4 +82,12 @@ for net_name, addresses in server.addresses.items():
     for addr in addresses:
         print(f"{net_name} → {addr['addr']} ({addr['OS-EXT-IPS:type']})")
 
+
+### Resultats
+
+Terminal : Confirmation que la VM est bien créee + accès SSH possible vers la VM
+
+OpenStack Dashboard : VM ajoutée à la liste des instances
+
+---
 
