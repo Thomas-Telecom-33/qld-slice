@@ -18,6 +18,10 @@ sudo usermod -aG docker $USER
 ```bash
 newgrp docker
 ```
+```bash
+
+git clone git@gitlab.ilabt.imec.be:slices-public/slices-bi-blueprint.git
+```
 
 ---
 
