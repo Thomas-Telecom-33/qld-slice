@@ -47,6 +47,10 @@ pip install -e .[dev,test]
 ### Lancement du serveur FastAPI
 
 Lancé automatiquement dans le container avec :
+```bash
+python -m uvicorn slices_bi_blueprint_backend.app:app --host 0.0.0.0 --port 8000 --reload
+```
+Puis il est possible d'accéder à :
 
 - http://localhost:8000/docs
 - http://localhost:8000/redoc
