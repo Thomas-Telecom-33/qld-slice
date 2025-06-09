@@ -59,7 +59,7 @@ pip install openstacksdk
 
 ### 2.3 Script Python de test : `test_create_vm.py`
 
-Ce script permet de créer une VM OpenStack en utilisant les paramètres définis :
+Ce script permet de créer une VM OpenStack en utilisant les paramètres définis, il s'agit d'un script de test permettant de se familiariser avec la bilbliothèque openstacksdk :
 ```bash
 import openstack
 import base64
@@ -117,3 +117,5 @@ for net_name, addresses in server.addresses.items():
 - **OpenStack Dashboard** : La VM apparaît dans la liste des instances.
 
 ---
+
+
