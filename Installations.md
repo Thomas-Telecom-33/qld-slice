@@ -10,16 +10,6 @@
 sudo apt update
 ```
 ```bash
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-```
-```bash
-sudo usermod -aG docker $USER
-```
-```bash
-newgrp docker
-```
-```bash
-
 git clone git@gitlab.ilabt.imec.be:slices-public/slices-bi-blueprint.git
 ```
 
@@ -50,10 +40,16 @@ pip install -e .[dev,test]
 
 ### Lancement du serveur FastAPI
 
+Initialisé d'abord une première fois avec :
+```bash
+alembic upgrade head
+```
+
 Lancé automatiquement dans le container avec :
 ```bash
 python -m uvicorn slices_bi_blueprint_backend.app:app --host 0.0.0.0 --port 8000 --reload
 ```
+
 Puis il est possible d'accéder à :
 
 - http://localhost:8000/docs
@@ -67,32 +63,114 @@ INFO:     127.0.0.1:53914 - "GET /docs HTTP/1.1" 200 OK
 ```
 
 Le backend tourne correctement.
-
 ---
 
 ## ÉTAPE 3 — Authentification via Slices CLI
 
 Dans un nouveau terminal dans VSCode (container) sans /examples :
-
+Installation
 ```bash
 pip install slices-cli --extra-index-url=https://doc.slices-ri.eu/pypi/
 ```
+Authentification
 ```bash
-
 slices auth login
 ```
+Pour prendre en main le CLI :
 ```bash
-
+slices --help
+```
+Lister les projets
+```bash
 slices project list
 ```
+Créer un projet nommé par exemple "qkd"
 ```bash
-
 slices project use qkd
 ```
-
+Si on veut savoir dans quel projet nous sommes :
+```bash
+slices project show
+```
+On peut aussi créer une expérience
+```bash
+slices experiment list
+```
+En créer une
+```bash
+slices experiment create experiment-qkd
+```
 ---
 
-## ÉTAPE 4 — Test de création de ressource
+## ÉTAPE 4 — Obtention des tokens
+
+Il existe 2 tokens :
+
+- Token user :
+```bash
+slices auth get-for-audience
+```
+Permet de faire des requêtes GET
+
+- Token d'experience :
+```bash
+slices experiment jwt experiment-qkd
+```
+Permet de faire des GET & POST
+
+## ÉTAPE 5 — Test des endpoints via SWAGUER
+
+### 5.1 GET IMAGES/FLAVOR
+Dans le swaguer http://localhost:8000/docs#, on peut alors tester les endpoint utilisés.
+
+Dans "Authorize", on colle alors le token généré (soit le token user soit le token d'experience), par exemple:
+"ey.........fbW"
+
+Puis on clique sur Authorize et close.
+
+On peut alors lancer notre première reqûete GET :
+Images > Try it out > Excecute
+La sortie attendue est alors 200
+
+### 5.2 POST IMAGES/FLAVOR
+Maintenant, on va ajouter des images/flavor, avec le token d'experience (même procédure qu'en haut), le format du request body est déjà prérempli, on adapte si on veut puis Excecute.
+
+Par exemple :
+```bash
+{
+  "friendly_name": "TEST",
+  "cluster_id": "default",
+  "location": "TEST",
+  "default_username": "TEST",
+  "min_disk_mb": 8000,
+  "min_ram_mib": 512,
+  "short_description": "string",
+  "long_description": "string",
+  "tags": [],
+  "hidden": false
+}
+```
+On doit aller obtenir un code 200.
+
+
+## GET/POST resources
+On peut récuperer toutes les infos demandés liés au projet et experience avec :
+```bash
+slices experiment show qkd-experiment --format json
+```
+
+
+
+## ÉTAPE 6 — 
+
+
+
+
+
+
+
+
+## ÉTAPE  — Test de création de ressource
 
 Toujours dans /examples :
 
