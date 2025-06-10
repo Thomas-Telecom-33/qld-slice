@@ -1,10 +1,10 @@
-# BI BACKEND
+# SLICES BI Blueprint adaptation with Openstack 
 
 ---
 
 ## ÉTAPE 1 — Installations nécessaires
 
-### Docker & dépendances système
+### 1.1 Docker & dépendances système
 
 ```bash
 sudo apt update
@@ -15,7 +15,7 @@ git clone git@gitlab.ilabt.imec.be:slices-public/slices-bi-blueprint.git
 
 ---
 
-## Ouverture du projet dans VSCode
+### 1.2 Ouverture du projet dans VSCode
 
 - Ouvrir le dépôt dans VSCode
 - Lancer avec : `Reopen in Container` (Dev Container)
@@ -23,7 +23,7 @@ git clone git@gitlab.ilabt.imec.be:slices-public/slices-bi-blueprint.git
 
 ---
 
-## Installation des dépendances Python
+### 1.3 Installation des dépendances Python
 
 Dans le terminal du container VSCode :
 
@@ -38,7 +38,7 @@ pip install -e .[dev,test]
 
 ## ÉTAPE 2 — Vérification du backend FastAPI
 
-### Lancement du serveur FastAPI
+### 2.1 Lancement du serveur FastAPI
 
 Initialisé d'abord une première fois avec :
 ```bash
@@ -55,7 +55,7 @@ Puis il est possible d'accéder à :
 - http://localhost:8000/docs
 - http://localhost:8000/redoc
 
-### Vérification logs VSCode :
+### 2.2 Vérification logs VSCode :
 
 ```bash
 INFO:     127.0.0.1:34672 - "GET /redoc HTTP/1.1" 200 OK
@@ -128,7 +128,7 @@ Sous .env, on rajoute alors notre UserID :
 ```bash
 ADMIN_USER_IDS=[ user_account.ilabt.imec.be_ ...]
 ```
-
+---
 ## ÉTAPE 5 — Test des endpoints via SWAGUER
 
 ### 5.1 GET IMAGES/FLAVOR
@@ -185,26 +185,89 @@ slices auth id-token https://slices-bi-blueprint.ilabt.imec.be
 ```
 On doit aller obtenir un code 200. La resource est bien crée.
 
+---
+## ÉTAPE 6 — Adaptation de la base de donnée
 
-## ÉTAPE 6 — 
+Maintenant que l'on sait manipuler les ENDPOINTS, on va alors pouvoir adapter notre base de donnée à notre infrastructure.
+Pour cela, il est nécessaire de récuperer l'ensemble des images et flavors de notre infra.
+
+On peut alors faire un script de récupération comme celui-ci :
+```bash
+import openstack
+
+def main():
+    conn = openstack.connect()
+
+    print("IMAGES")
+    for image in conn.image.images():
+        print(f"\n ID: {image.id}")
+        print(f"Name: {image.name}")
+        print(f"Created At: {image.created_at}")
+        print(f"Status: {image.status}")
+        print(f"Visibility: {image.visibility}")
+        print(f"Tags: {image.tags}")
+
+    print("\n FLAVORS")
+    for flavor in conn.compute.flavors():
+        print(f"\n ID: {flavor.id}")
+        print(f"Name: {flavor.name}")
+        print(f"vCPUs: {flavor.vcpus}")
+        print(f"RAM (MB): {flavor.ram}")
+        print(f"Disk (GB): {flavor.disk}")
+        print(f"Ephemeral (GB): {flavor.ephemeral}")
+        print(f"Swap (MB): {flavor.swap}")
+        print(f"RXTX Factor: {flavor.rxtx_factor}")
+        print(f"Is Public: {flavor.is_public}")
+
+if __name__ == "__main__":
+    main()
+```
+
+On a alors la liste des images et flavors que l'on va rajouter dans notre base de donnée via POST images et POST resources comme expliqué précédemment.
+
+Exemples :
+
+> POST Images :
+```bash
+{
+  "friendly_name": "Ubuntu Server 20.04",
+  "cluster_id": "default",
+  "location": "ubuntu-server-20.04",
+  "default_username": "ubuntu",
+  "min_disk_mb": 8000,
+  "min_ram_mib": 512,
+  "short_description": "OpenStack",
+  "long_description": "OpenStack image ID: 707d9055-76d7-4f3f-a2ee-9d7983f3baac",
+  "tags": [],
+  "hidden": false
+}
+```
+
+> POST FLAVORS :
+```bash
+
+```
 
 
+On peut vérifier tous ces ajouts via GET images et GET flavors.
+On peut aussi vérifier cela à partir de notre VM :
+```bash
+docker exec -it slices-bi-blueprint_devcontainer-db-1 psql -U slices_bi -d slices_bi
+\dt
+SELECT * FROM disk_images;
+SELECT * FROM flavors;
+```
+---
+## ÉTAPE 7  — Test de création de ressource
 
+Dans /examples, deux fichiers d'exemples sont présents :
 
-
-
-
-
-## ÉTAPE  — Test de création de ressource
-
-Toujours dans /examples :
-
+On peut lancer le script de cette manière :
 ```bash
 ./request-resources.sh exp1
 ```
 
 Résultat :
-
 - Token récupéré
 - Expériment créé
 - Appels GET/POST sur /resources/ renvoient 404
@@ -212,4 +275,11 @@ Résultat :
 Cause : les endpoints REST de gestion des ressources ne sont pas encore implémentés.
 
 ---
+
+## ÉTAPE 8  — Fonction create_compute_resource :
+La première fonction à compléter dans la template est la fonction de création d'une resource.
+Nous devons ainsi compléter la partie "# TODO: implement your create resource logic here" pour être en accord avec Openstack.
+
+
+
 
