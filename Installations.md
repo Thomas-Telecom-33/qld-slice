@@ -67,7 +67,7 @@ Le backend tourne correctement.
 
 ## ÉTAPE 3 — Authentification via Slices CLI
 
-Dans un nouveau terminal dans VSCode (container) sans /examples :
+Dans un nouveau terminal dans VSCode (container) :
 Installation
 ```bash
 pip install slices-cli --extra-index-url=https://doc.slices-ri.eu/pypi/
@@ -76,7 +76,7 @@ Authentification
 ```bash
 slices auth login
 ```
-Pour prendre en main le CLI :
+Pour aides :
 ```bash
 slices --help
 ```
@@ -92,13 +92,13 @@ Si on veut savoir dans quel projet nous sommes :
 ```bash
 slices project show
 ```
-On peut aussi créer une expérience
+On peut aussi voir les experiences
 ```bash
 slices experiment list
 ```
 En créer une
 ```bash
-slices experiment create experiment-qkd
+slices experiment create qkd-experiment
 ```
 ---
 
@@ -114,9 +114,20 @@ Permet de faire des requêtes GET
 
 - Token d'experience :
 ```bash
-slices experiment jwt experiment-qkd
+slices experiment jwt qkd-experiment
 ```
 Permet de faire des GET & POST
+
+On va donc rajouter son compte dans les ADMIN_USER_IDS du fichier .env du container, permettant ainsi d'avoir des droits nécessaires pour faire l'ensemble des requêtes.
+
+Ce userID est récupérable en faisant :
+```bash
+slices project show
+```
+Sous .env, on rajoute alors notre UserID : 
+```bash
+ADMIN_USER_IDS=[ user_account.ilabt.imec.be_ ...]
+```
 
 ## ÉTAPE 5 — Test des endpoints via SWAGUER
 
@@ -130,7 +141,7 @@ Puis on clique sur Authorize et close.
 
 On peut alors lancer notre première reqûete GET :
 Images > Try it out > Excecute
-La sortie attendue est alors 200
+La sortie attendue est alors 200.
 
 ### 5.2 POST IMAGES/FLAVOR
 Maintenant, on va ajouter des images/flavor, avec le token d'experience (même procédure qu'en haut), le format du request body est déjà prérempli, on adapte si on veut puis Excecute.
@@ -150,15 +161,29 @@ Par exemple :
   "hidden": false
 }
 ```
-On doit aller obtenir un code 200.
+On doit aller obtenir un code 200. L'image est bien crée.
 
 
-## GET/POST resources
+## 5.3 GET/POST resources
 On peut récuperer toutes les infos demandés liés au projet et experience avec :
 ```bash
 slices experiment show qkd-experiment --format json
 ```
+On complète ainsi les champs project et experiment_id puis EXECUTE.
 
+On doit aller obtenir un code 200.
+
+On remplit les mêmes champs dans la requête POST, le body est déjà donné.
+Concernant les JWT :
+> Dans Authorize, toujours le token d'experience (Attention, il expire rapidement, environ 15 min)
+```bash
+slices experiment jwt qkd-experiment
+```
+> Dans la requete body, le token utilisateur
+```bash
+slices auth id-token https://slices-bi-blueprint.ilabt.imec.be
+```
+On doit aller obtenir un code 200. La resource est bien crée.
 
 
 ## ÉTAPE 6 — 
