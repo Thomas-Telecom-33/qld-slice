@@ -95,6 +95,7 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 - Infrastructure Openstack connectée et conforme aux attentes du projet.
 
 A cette étape là, on doit être capable de créer/supprimer des Vms Openstack compatible avec SLICES (comme le demande le projet).
+
 ---
 
 ## 🐳 PHASE 4 — Déploiement Kubernetes
