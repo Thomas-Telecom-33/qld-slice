@@ -265,24 +265,67 @@ SELECT * FROM flavors;
 
 ---
 
+
 ## ÉTAPE 7 — Test de création de ressource via script
 
-Fichier : `/examples/request-resources.sh`
+**Fichier :** `/examples/request-resources.sh`
 
-Lancement :
-```bash
-./request-resources.sh exp1
+Ce script permet de tester automatiquement la création d'une ressource via l’API.
+
+### 7.1 Modification de l’image et du flavor
+
+Avant exécution, adapter les champs suivants dans le corps JSON du script :
+
+```json
+"disk_image_id": "image_tld-city-bp1_{UUID_IMAGE}",
+"flavor_id": "flavor_tld-city-bp1_{UUID_FLAVOR}"
 ```
 
-Le script automatise :
-- Authentification
+### 7.2 Pour lister les UUIDs disponibles dans la base de données :
+
+Accéder au conteneur PostgreSQL :
+
+```bash
+docker exec -it slices-bi-blueprint_devcontainer-db-1 psql -U slices_bi -d slices_bi
+```
+
+Puis exécuter les requêtes suivantes :
+
+```sql
+SELECT id, friendly_name FROM disk_images;
+SELECT id, friendly_name FROM flavors;
+```
+
+Cela vous retournera les UUIDs à utiliser dans les IDs `disk_image_id` et `flavor_id` avec les préfixes correspondants.
+
+
+### 7.3 Lancement du script
+
+```bash
+./request-resources.sh Nom_experience
+```
+
+> Remplace `Nom_experience` par le nom de l’expérience à créer ou à utiliser.
+
+### 7.4 Le script automatise les étapes suivantes :
+
+- Authentification SLICES
+- Sélection ou création du projet
 - Création d’expérience
-- Génération de tokens
-- Création de ressource avec POST
+- Récupération des tokens (expérience + utilisateur)
+- Création de la ressource via `POST /resources`
 
-### Résultat attendu :
 
-Code `200`, ressource visible via GET, tâche visible via GET /tasks.
+### 7.5 Résultat attendu
+
+- Code HTTP `200`
+- La ressource est visible via un GET sur `/resources`
+- La tâche est traçable via un GET sur `/tasks/{task_id}`
+
+> Pour vérifier la ressource via un appel `GET`, veillez à bien utiliser :
+>
+> - Le JWT d’expérience valide (attention : expire rapidement)
+> - Le bon ID de l’expérience (`experiment_id`)
 
 ---
 
