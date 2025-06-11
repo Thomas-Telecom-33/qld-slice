@@ -1,4 +1,5 @@
-# SLICES BI Blueprint adaptation with Openstack 
+
+# SLICES BI Blueprint adaptation with Openstack
 
 ---
 
@@ -9,6 +10,9 @@
 ```bash
 sudo apt update
 ```
+
+Cloner le dépôt principal :
+
 ```bash
 git clone git@gitlab.ilabt.imec.be:slices-public/slices-bi-blueprint.git
 ```
@@ -17,20 +21,18 @@ git clone git@gitlab.ilabt.imec.be:slices-public/slices-bi-blueprint.git
 
 ### 1.2 Ouverture du projet dans VSCode
 
-- Ouvrir le dépôt dans VSCode
-- Lancer avec : `Reopen in Container` (Dev Container)
-- Attendre le chargement complet
+- Ouvrir le dépôt cloné dans VSCode.
+- Lancer : `Reopen in Container (Dev Container)`
+- Attendre que l’environnement se charge complètement.
 
 ---
 
 ### 1.3 Installation des dépendances Python
 
-Dans le terminal du container VSCode :
+Dans le terminal à l’intérieur du conteneur :
 
 ```bash
 pip install --upgrade pip
-```
-```bash
 pip install -e .[dev,test]
 ```
 
@@ -38,116 +40,100 @@ pip install -e .[dev,test]
 
 ## ÉTAPE 2 — Vérification du backend FastAPI
 
-### 2.1 Lancement du serveur FastAPI
+### 2.1 Initialisation de la base de données
 
-Initialisé d'abord une première fois avec :
+Lancer la migration initiale :
 ```bash
 alembic upgrade head
 ```
 
-Lancé automatiquement dans le container avec :
+### 2.2 Démarrage du serveur FastAPI
+
 ```bash
 python -m uvicorn slices_bi_blueprint_backend.app:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-Puis il est possible d'accéder à :
-
+Accès via navigateur :
 - http://localhost:8000/docs
 - http://localhost:8000/redoc
 
-### 2.2 Vérification logs VSCode :
+### 2.3 Vérification des logs
 
 ```bash
 INFO:     127.0.0.1:34672 - "GET /redoc HTTP/1.1" 200 OK
 INFO:     127.0.0.1:53914 - "GET /docs HTTP/1.1" 200 OK
 ```
 
-Le backend tourne correctement.
 ---
 
 ## ÉTAPE 3 — Authentification via Slices CLI
 
-Dans un nouveau terminal dans VSCode (container) :
-Installation
+### Installation
 ```bash
 pip install slices-cli --extra-index-url=https://doc.slices-ri.eu/pypi/
 ```
-Authentification
+
+### Connexion
+
 ```bash
 slices auth login
 ```
-Pour aides :
+
+### Commandes utiles
+
 ```bash
 slices --help
-```
-Lister les projets
-```bash
 slices project list
-```
-Créer un projet nommé par exemple "qkd"
-```bash
 slices project use qkd
-```
-Si on veut savoir dans quel projet nous sommes :
-```bash
 slices project show
-```
-On peut aussi voir les experiences
-```bash
 slices experiment list
-```
-En créer une
-```bash
 slices experiment create qkd-experiment
 ```
+
 ---
 
 ## ÉTAPE 4 — Obtention des tokens
 
-Il existe 2 tokens :
-
-- Token user :
+- **Token utilisateur (GET uniquement)** :
 ```bash
-slices auth get-for-audience
+slices auth id-token https://slices-bi-blueprint.ilabt.imec.be
 ```
-Permet de faire des requêtes GET
 
-- Token d'experience :
+- **Token d’expérience (GET & POST)** :
 ```bash
 slices experiment jwt qkd-experiment
 ```
-Permet de faire des GET & POST
 
-On va donc rajouter son compte dans les ADMIN_USER_IDS du fichier .env du container, permettant ainsi d'avoir des droits nécessaires pour faire l'ensemble des requêtes.
+### Définir les administrateurs
 
-Ce userID est récupérable en faisant :
+Récupérer l’ID utilisateur :
+
 ```bash
 slices project show
 ```
-Sous .env, on rajoute alors notre UserID : 
-```bash
-ADMIN_USER_IDS=[ user_account.ilabt.imec.be_ ...]
+
+Modifier `.env` :
+```env
+ADMIN_USER_IDS=["user_account.ilabt.imec.be_..."]
 ```
+
 ---
-## ÉTAPE 5 — Test des endpoints via SWAGUER
 
-### 5.1 GET IMAGES/FLAVOR
-Dans le swaguer http://localhost:8000/docs#, on peut alors tester les endpoint utilisés.
+## ÉTAPE 5 — Test des endpoints via Swagger UI
 
-Dans "Authorize", on colle alors le token généré (soit le token user soit le token d'experience), par exemple:
-"ey.........fbW"
+### 5.1 GET /disk-images et /flavors
 
-Puis on clique sur Authorize et close.
+1. Aller sur http://localhost:8000/docs
+2. Cliquer sur "Authorize", coller un token (utilisateur ou expérience).
+3. Lancer les endpoints de type GET.
+4. Attendre un retour `200 OK`.
 
-On peut alors lancer notre première reqûete GET :
-Images > Try it out > Excecute
-La sortie attendue est alors 200.
+### 5.2 POST /disk-images et /flavors
 
-### 5.2 POST IMAGES/FLAVOR
-Maintenant, on va ajouter des images/flavor, avec le token d'experience (même procédure qu'en haut), le format du request body est déjà prérempli, on adapte si on veut puis Excecute.
+Utiliser un **token d’expérience** (durée de vie courte, 15 min env.).
 
-Par exemple :
-```bash
+Exemple :
+```json
 {
   "friendly_name": "TEST",
   "cluster_id": "default",
@@ -161,38 +147,51 @@ Par exemple :
   "hidden": false
 }
 ```
-On doit aller obtenir un code 200. L'image est bien crée.
 
+### 5.3 GET/POST /resources
 
-## 5.3 GET/POST resources
-On peut récuperer toutes les infos demandés liés au projet et experience avec :
+Informations à récupérer :
 ```bash
 slices experiment show qkd-experiment --format json
 ```
-On complète ainsi les champs project et experiment_id puis EXECUTE.
 
-On doit aller obtenir un code 200.
+**Attention à la date `expires_at`** :
 
-On remplit les mêmes champs dans la requête POST, le body est déjà donné.
-Concernant les JWT :
-> Dans Authorize, toujours le token d'experience (Attention, il expire rapidement, environ 15 min)
 ```bash
-slices experiment jwt qkd-experiment
+slices experiment show qkd-experiment
 ```
-> Dans la requete body, le token utilisateur
+
+Choisir une date *avant* celle d’expiration de l’expérience, format :
+```json
+"expires_at": "2025-06-11T12:30:00Z"
+```
+
+Générer un `request_id` :
 ```bash
-slices auth id-token https://slices-bi-blueprint.ilabt.imec.be
+python3 -c "import uuid; print(uuid.uuid4())"
 ```
-On doit aller obtenir un code 200. La resource est bien crée.
+
+Token JWT utilisateur dans le body, JWT d’expérience dans le header `Authorization`.
+
+### 5.4 GET /tasks/{id}
+
+Récupérer l’`id` depuis la ressource POSTée :
+```json
+{
+  "id": "task_tld-city-bp1_00sqtwepw69hev0qxd08d2f3dk",
+  "status": "finished",
+  "completed": 100,
+  ...
+}
+```
 
 ---
-## ÉTAPE 6 — Adaptation de la base de donnée
 
-Maintenant que l'on sait manipuler les ENDPOINTS, on va alors pouvoir adapter notre base de donnée à notre infrastructure.
-Pour cela, il est nécessaire de récuperer l'ensemble des images et flavors de notre infra.
+## ÉTAPE 6 — Adaptation de la base de données
 
-On peut alors faire un script de récupération comme celui-ci :
-```bash
+### Script de récupération OpenStack :
+
+```python
 import openstack
 
 def main():
@@ -223,12 +222,10 @@ if __name__ == "__main__":
     main()
 ```
 
-On a alors la liste des images et flavors que l'on va rajouter dans notre base de donnée via POST images et POST resources comme expliqué précédemment.
+### Ajout des éléments via API
 
-Exemples :
-
-> POST Images :
-```bash
+Exemple image :
+```json
 {
   "friendly_name": "Ubuntu Server 20.04",
   "cluster_id": "default",
@@ -237,49 +234,65 @@ Exemples :
   "min_disk_mb": 8000,
   "min_ram_mib": 512,
   "short_description": "OpenStack",
-  "long_description": "OpenStack image ID: 707d9055-76d7-4f3f-a2ee-9d7983f3baac",
+  "long_description": "OpenStack image ID: XXXXX",
   "tags": [],
   "hidden": false
 }
 ```
 
-> POST FLAVORS :
-```bash
-
+Exemple flavor :
+```json
+{
+  "friendly_name": "Flavor-4",
+  "description": "Openstack Flavor4 : ID : XXXXX",
+  "flavor_type": "vm",
+  "ram_mib": 2048,
+  "vcpus": 2,
+  "disk_mb": 8000
+}
 ```
 
+### Vérification via PostgreSQL
 
-On peut vérifier tous ces ajouts via GET images et GET flavors.
-On peut aussi vérifier cela à partir de notre VM :
 ```bash
 docker exec -it slices-bi-blueprint_devcontainer-db-1 psql -U slices_bi -d slices_bi
+```
+```sql
 \dt
 SELECT * FROM disk_images;
 SELECT * FROM flavors;
 ```
+
 ---
-## ÉTAPE 7  — Test de création de ressource
 
-Dans /examples, deux fichiers d'exemples sont présents :
+## ÉTAPE 7 — Test de création de ressource via script
 
-On peut lancer le script de cette manière :
+Fichier : `/examples/request-resources.sh`
+
+Lancement :
 ```bash
 ./request-resources.sh exp1
 ```
 
-Résultat :
-- Token récupéré
-- Expériment créé
-- Appels GET/POST sur /resources/ renvoient 404
+Le script automatise :
+- Authentification
+- Création d’expérience
+- Génération de tokens
+- Création de ressource avec POST
 
-Cause : les endpoints REST de gestion des ressources ne sont pas encore implémentés.
+### Résultat attendu :
+
+Code `200`, ressource visible via GET, tâche visible via GET /tasks.
 
 ---
 
-## ÉTAPE 8  — Fonction create_compute_resource :
-La première fonction à compléter dans la template est la fonction de création d'une resource.
-Nous devons ainsi compléter la partie "# TODO: implement your create resource logic here" pour être en accord avec Openstack.
+## ÉTAPE 8 — Implémentation de `create_compute_resource`
 
+Dans le fichier du template (à compléter) :
 
+Rechercher :
+```python
+# TODO: implement your create resource logic here
+```
 
-
+À compléter pour lancer une vraie VM sur OpenStack, à partir des données reçues (image, flavor, username...).
