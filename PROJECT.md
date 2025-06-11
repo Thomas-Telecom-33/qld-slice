@@ -1,11 +1,11 @@
 # Projet – Blueprint for Slices BI Backend for Openstack
 
-## Titre
-**SLICES-RI compliant interface for a QKD BluePrint**
+## Titre : **SLICES-RI compliant interface for a QKD BluePrint**
 
 SLICES-RI (https://www.slices-ri.eu) compliant interface for a QKD BluePrint.
 
 We would like to add a software interface compliant with the SLICES-RI (Scientific Large Scale Infrastructure for Computing/Communication Experimental Studies) to a QKD BluePrint experiment we have.  Again this involves creating code that interfaces with users through a webpage, and interact with SLICES and with the experiment.
+
 ---
 
 ## 🎯 Objectif général
