@@ -442,21 +442,45 @@ for net_name, addresses in server.addresses.items():
 - **Terminal** : Affichage de l’état de la VM et de son adresse IP. Si tout se passe bien, un accès SSH est possible.
 - **OpenStack Dashboard** : La VM apparaît dans la liste des instances.
 
+---
 
+## ÉTAPE 9 — Implémentation des fonctions OpenStack
 
+L’objectif de cette étape est d’implémenter les fonctions permettant la **création** et la **suppression** de machines virtuelles (VMs) via OpenStack.
 
+### 9.1 Création d'une ressource (VM)
 
+La logique est répartie de manière claire dans deux fichiers distincts :
 
+#### `infrastructure/openstack_backend.py`
+Ce fichier contient **les appels directs à l’API OpenStack** via la librairie `openstacksdk`.
 
+- Il gère la création d’une instance, l’assignation de la clé SSH, du flavor, de l’image, et l’injection du `cloud-config`.
+- Il isole les dépendances avec OpenStack, facilitant les tests et la maintenance.
 
+#### `tasks/compute_resource.py`
+Ce fichier expose la fonction **`create_compute_resource`**.
+Elle orchestre la création d’une VM.
 
-## ÉTAPE 8 — Implémentation de `create_compute_resource`
+#### Tester la création d’une VM
 
-Dans le fichier du template (à compléter) :
-
-Rechercher :
-```python
-# TODO: implement your create resource logic here
+Utiliser le script fourni request-resources.sh :  
+```bash
+./example/request-resources.sh <exp_name>
 ```
 
-À compléter pour lancer une vraie VM sur OpenStack, à partir des données reçues (image, flavor, username...).
+Les paramètres attendus à l'intérieur :
+- `cloud-config` : fichier de configuration cloud-init
+- `vm-name` : nom de la machine à créer
+- `image-id` : ID d’image OpenStack
+- `flavor-id` : ID du flavor OpenStack
+- `ssh-key` : nom de la clé SSH
+
+
+### 9.2 Suppression d'une ressource (VM)
+
+À faire :  
+Compléter la fonction `delete_compute_resource` dans `tasks/compute_resource.py`  
+et une méthode dédiée dans `openstack_backend.py` qui appelle `conn.compute.delete_server(...)` comme réalisée précédemment avec la fonction create.
+Puis tester via SWAGUER.
+
