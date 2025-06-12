@@ -5,10 +5,11 @@
 
 ## ÉTAPE 1 — Installations nécessaires
 
-### 1.1 Docker & dépendances système
+### 1.1 Git clone
 
+Accès au gitlab :
 ```bash
-sudo apt update
+https://gitlab.ilabt.imec.be/slices-public/slices-bi-blueprint
 ```
 
 Cloner le dépôt principal :
@@ -16,11 +17,11 @@ Cloner le dépôt principal :
 ```bash
 git clone git@gitlab.ilabt.imec.be:slices-public/slices-bi-blueprint.git
 ```
-
 ---
 
 ### 1.2 Ouverture du projet dans VSCode
 
+Comme expliqué dans le README.md :
 - Ouvrir le dépôt cloné dans VSCode.
 - Lancer : `Reopen in Container (Dev Container)`
 - Attendre que l’environnement se charge complètement.
@@ -313,10 +314,10 @@ python -m taskiq worker slices_bi_blueprint_backend.worker:broker --reload --log
 
 Puis on lance le script :
 ```bash
-./request-resources.sh Nom_experience
+./request-resources.sh <experience_name>
 ```
 
-> Remplace `Nom_experience` par le nom de l’expérience à créer ou à utiliser.
+> Remplacer `Nom_experience` par le nom de l’expérience à créer ou à utiliser.
 
 ### 7.4 Le script automatise les étapes suivantes :
 
