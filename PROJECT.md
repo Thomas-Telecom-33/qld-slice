@@ -13,9 +13,7 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 - Développer un backend conforme aux standards SLICES.
 - Permettre la création et la gestion de ressources expérimentales via l’API.
 - Connecter l’API à une infrastructure OpenStack puis Kubernetes.
-- Intégrer les outils SLICES (CLI, Auth, Gateway).
-- Tester et déployer la solution dans un environnement simulé, puis réel.
-
+- Fournir une interface utilisateur permettant de faire cela
 ---
 
 ## 📘 PHASE 0 — Documentation & Compréhension
@@ -89,6 +87,11 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 - Test via Swagger UI.
 - Test via request-resources.sh
 
+### ✅ Avancement
+- Création de VM openstack fonctionnelle : la VM apparait désormais sur Horizon
+> TODO : AUTOMATISER LE CLOUD.YALM QUI EST DANS LE FICHIER request-resources.sh pour le moment
+
+
 ### 📦 Livrables
 - Création réelle de VMs.
 - Suppresion réelle de Vms.
@@ -106,4 +109,3 @@ A cette étape là, on doit être capable de créer/supprimer des Vms Openstack 
 
 ## 🚀 PHASE 7 — Déploiement & Documentation finale
 
-**Ce document retrace les grandes étapes de conception, tests et déploiement d’un backend SLICES-ready, avec intégration progressive dans une infra cloud.**
