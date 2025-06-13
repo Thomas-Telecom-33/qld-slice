@@ -46,11 +46,8 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 
 ### ✅ Avancement
 - Base opérationnelle avec Alembic.
-- Création de ressources via POST vérifiée.
-- Persistance des tâches validée.
 - Base de données Openstack intégrée.
 - Script d’import des images/flavors.
-- Base alimentée avec les vraies valeurs OpenStack.
 
 ### 📦 Livrables
 - Base PostgreSQL + schéma Alembic.
@@ -89,15 +86,17 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 
 ### ✅ Avancement
 - Création de VM openstack fonctionnelle : la VM apparait désormais sur Horizon
-> TODO : AUTOMATISER LE CLOUD.YALM QUI EST DANS LE FICHIER request-resources.sh pour le moment
-
+- Création non bloquante
+- Création via fichier clouds.yaml géré
+- Gestion de plusieurs network désormais
+-
+-
+- Suppression de VM openstack fonctionnelle : la VM est supprimée sur Horizon
 
 ### 📦 Livrables
 - Création réelle de VMs.
 - Suppresion réelle de Vms.
 - Infrastructure Openstack connectée et conforme aux attentes du projet.
-
-A cette étape là, on doit être capable de créer/supprimer des Vms Openstack compatible avec SLICES (comme le demande le projet).
 
 ---
 
