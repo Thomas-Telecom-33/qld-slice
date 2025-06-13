@@ -592,13 +592,13 @@ Utiliser le script fourni request-resources.sh :
 ```
 
 Les paramètres attendus à l'intérieur :
-- `cloud-config` : fichier de configuration cloud-init
 - `VM_NAME` : nom de la machine à créer
 - `DISK_IMAGE_ID` : ID d’image OpenStack
 - `FLAVOR_ID` : ID du flavor OpenStack
 - `NETWORK_NAME` : Nom du réseau
 - `EXPIRATION_DATE` : Date d'experiation de l'experience
 - `SSH_PUBLIC_KEY` : Clé SSH
+- `USERDATA_SCRIPT` : fichier de configuration cloud-init
 
 ---
 
@@ -609,3 +609,4 @@ Compléter la fonction `delete_compute_resource` dans `tasks/compute_resource.py
 et une méthode dédiée dans `openstack_backend.py` qui appelle `conn.compute.delete_server(...)` comme réalisée précédemment avec la fonction create.
 Puis tester via SWAGUER.
 
+═══════════════════════════════════════════════════════════════════════════════════
