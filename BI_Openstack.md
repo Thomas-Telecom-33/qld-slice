@@ -327,7 +327,12 @@ Et un worker doit être lancer :
 python -m taskiq worker slices_bi_blueprint_backend.worker:broker --reload --log-level=DEBUG
 ```
 
-Puis on lance le script :
+Et taskIQ peut être lancer :
+```bash
+python -m taskiq worker slices_bi_blueprint_backend.worker:scheduler --log-level=DEBUG
+```
+
+Puis on lance le script de test :
 ```bash
 ./request-resources.sh <experience_name>
 ```
@@ -339,7 +344,7 @@ Puis on lance le script :
 ### 7.4 Le script automatise les étapes suivantes :
 
 - Authentification SLICES
-- Sélection ou création du projet
+- Sélection du projet
 - Création d’expérience
 - Récupération des tokens (expérience + utilisateur)
 - Création de la ressource via `POST /resources`
@@ -381,12 +386,12 @@ clouds:
     auth:
       auth_url: 
       username: your_username
+      password: your_password
       project_name: your_project
       user_domain_name: Default
       project_domain_name: Default
     region_name: RegionOne
     interface: public
-    password: your_password
 ```
 
 ---
@@ -485,7 +490,7 @@ La logique est répartie de manière claire dans deux fichiers distincts :
 Ce fichier contient **les appels directs à l’API OpenStack** via la librairie `openstacksdk`.
 
 - Il gère la connexion à OpenStack, la création d’une instance, l’assignation de la clé SSH, du flavor, de l’image, et l’injection du `cloud-init` via `userdata`.
-- Ce fichier encapsule toutes les dépendances avec OpenStack, ce qui facilite la maintenance, les tests et l’éventuelle substitution de backend.
+- Ce fichier encapsule toutes les dépendances avec OpenStack, ce qui facilite la maintenance et les tests.
 
 
 #### `tasks/compute_resource.py`
@@ -592,13 +597,13 @@ Utiliser le script fourni request-resources.sh :
 ```
 
 Les paramètres attendus à l'intérieur :
-- `VM_NAME` : nom de la machine à créer
+- `VM_NAME` : Nom de la machine à créer
 - `DISK_IMAGE_ID` : ID d’image OpenStack
 - `FLAVOR_ID` : ID du flavor OpenStack
 - `NETWORK_NAME` : Nom du réseau
 - `EXPIRATION_DATE` : Date d'experiation de l'experience
 - `SSH_PUBLIC_KEY` : Clé SSH
-- `USERDATA_SCRIPT` : fichier de configuration cloud-init
+- `USERDATA_SCRIPT` : Fichier de configuration cloud-init
 
 ---
 
