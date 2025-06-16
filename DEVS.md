@@ -160,14 +160,10 @@ Exemple :
 
 Informations à récupérer :
 ```bash
-slices experiment show qkd-experiment --format json
+slices experiment show qkd-experiment
 ```
 
 **Attention à la date `expires_at`** :
-
-```bash
-slices experiment show qkd-experiment
-```
 
 Choisir une date *avant* celle d’expiration de l’expérience, format :
 ```json
