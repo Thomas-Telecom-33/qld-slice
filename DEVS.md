@@ -609,9 +609,27 @@ Les paramètres attendus à l'intérieur :
 
 ### 9.2 Suppression d'une ressource (VM)
 
-À faire :  
-Compléter la fonction `delete_compute_resource` dans `tasks/compute_resource.py`  
-et une méthode dédiée dans `openstack_backend.py` qui appelle `conn.compute.delete_server(...)` comme réalisée précédemment avec la fonction create.
-Puis tester via SWAGUER.
+Comme précédemment, la logique est répartie de manière claire dans deux fichiers distincts :
+
+
+#### `infrastructure/openstack_backend.py`
+
+La suppression est assurée par la fonction delete_vm.
+
+#### `tasks/compute_resource.py`
+
+La fonction **`delete_compute_resource()`**, qui est appelée en tâche asynchrone via **TaskIQ**.
+Comme pour la création, on utilise `run_in_executor()` pour déporter l’appel dans un **thread dédié**, permettant au backend de rester **réactif et non bloquant** :
+
+#### Tester la suppression d’une VM
+Via le SWAGUER UI dans la section DELETE RESOURCES.
+Résultats :
+- Code HTTP `200`
+- La ressource n'est plus visible via un GET sur `/resources`
+- La tâche est traçable via un GET sur `/tasks/{task_id}`
+
+
+
+
 
 ═══════════════════════════════════════════════════════════════════════════════════
