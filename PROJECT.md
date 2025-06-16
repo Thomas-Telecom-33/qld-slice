@@ -83,13 +83,14 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 - Implémenter la logique de suppresion de VM dans `delete_compute_resource`.
 - Test via Swagger UI.
 - Test via request-resources.sh
+- Régler les problèmes rencontrés + améliorer des choses existantes.
 
 ### ✅ Avancement
 - Création de VM openstack fonctionnelle : la VM apparait désormais sur Horizon
 - Création non bloquante
-- Création via fichier clouds.yaml géré
-- Gestion de plusieurs network désormais
--
+- Création via fichier clouds.yaml
+- Gestion de plusieurs network
+- Ajout des installations automatiques de openstacksdk et slices via dockerfile
 -
 - Suppression de VM openstack fonctionnelle : la VM est supprimée sur Horizon
 
