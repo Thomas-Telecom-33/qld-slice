@@ -91,7 +91,7 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 - Création via fichier clouds.yaml
 - Gestion de plusieurs network
 - Ajout des installations automatiques de openstacksdk et slices via dockerfile
--
+- Correction AssertionError: Please, `connect()` the broker first
 - Suppression de VM openstack fonctionnelle : la VM est supprimée sur Horizon
 ---
 ### 📦 Livrables
@@ -103,6 +103,13 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 ## 🐳 PHASE 4 — Déploiement Kubernetes
 ═══════════════════════════════════════════════════════════════════════════════════
 ## 🌐 PHASE 5 — Interface Frontend (UI)
+Front-end avec spécifications à venir.
+
+TODO :
+> clouds.yaml :
+  - Chaque utilisateur doit téléverser son clouds.yaml une seule fois via le frontend.
+  - Ce fichier est stocké côté backend, lié à son compte (base de données ou fichier privé).
+  - Lors d'une action (ex: création de VM), le backend utilise automatiquement ce fichier.
 ═══════════════════════════════════════════════════════════════════════════════════
 ## 🔒 PHASE 6 — Sécurité, Permissions et Logs
 ═══════════════════════════════════════════════════════════════════════════════════
