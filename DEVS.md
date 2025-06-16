@@ -412,7 +412,7 @@ Puis coller le contenu du fichier `clouds.yaml`.
 ### 8.3 Script Python de test : `test_create_vm.py`
 
 Ce script permet de créer une VM OpenStack en utilisant les paramètres définis, il s'agit d'un script de test permettant de se familiariser avec la bilbliothèque openstacksdk :
-```bash
+```python
 import openstack
 import base64
 
@@ -633,8 +633,32 @@ Résultats attendus :
 - La VM n'apparaît plus sur le dashboard Horizon.
 
 
+---
 
+### Problème identifié
 
+Lors de la création ou suppression de VM, une erreur empêchait la publication des événements FastStream :
 
+```
+AssertionError: Please, `connect()` the broker first.
+```
+
+Le broker n'était pas connecté avant l'appel à `publish()` dans les tâches.
+
+### Solution implémentée
+
+Connexion explicite du broker FastStream (`slices_faststream_broker`) au démarrage du worker :
+
+```python
+@broker.on_event(TaskiqEvents.WORKER_STARTUP, TaskiqEvents.CLIENT_STARTUP)
+    await slices_faststream_broker.connect()
+```
+
+Et également à son arrêt : 
+
+```python
+@broker.on_event(TaskiqEvents.WORKER_SHUTDOWN, TaskiqEvents.CLIENT_SHUTDOWN)
+  await slices_faststream_broker.close()
+```
 
 ═══════════════════════════════════════════════════════════════════════════════════
