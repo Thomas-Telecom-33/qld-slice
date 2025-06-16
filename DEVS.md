@@ -603,26 +603,35 @@ Les paramètres attendus à l'intérieur :
 
 ---
 
+
 ### 9.2 Suppression d'une ressource (VM)
 
-Comme précédemment, la logique est répartie de manière claire dans deux fichiers distincts :
-
+Comme pour la création, la logique de suppression d'une ressource est répartie proprement entre les deux fichiers.
 
 #### `infrastructure/openstack_backend.py`
 
-La suppression est assurée par la fonction delete_vm.
+La fonction `delete_vm()` se charge d’effectuer la suppression effective de la machine virtuelle dans OpenStack.
 
 #### `tasks/compute_resource.py`
 
-La fonction **`delete_compute_resource()`**, qui est appelée en tâche asynchrone via **TaskIQ**.
-Comme pour la création, on utilise `run_in_executor()` pour déporter l’appel dans un **thread dédié**, permettant au backend de rester **réactif et non bloquant** :
+La fonction asynchrone `delete_compute_resource()` est exécutée en tâche de fond via **TaskIQ**.  
+Elle procède de la manière suivante :
+- Marque la ressource comme `DELETING` dans la base de données.
+- Lance la suppression de la machine via `delete_vm()`, exécutée dans un **thread dédié** à l’aide de `run_in_executor()` pour éviter de bloquer la boucle principale.
+- Met à jour le statut en `DELETED` à la fin de l'opération.
 
-#### Tester la suppression d’une VM
-Via le SWAGUER UI dans la section DELETE RESOURCES.
-Résultats :
-- Code HTTP `200`
-- La ressource n'est plus visible via un GET sur `/resources`
-- La tâche est traçable via un GET sur `/tasks/{task_id}`
+---
+
+#### Test de la suppression
+
+La suppression peut être testée depuis l'interface **Swagger UI**, dans la section `DELETE /resources/{resource_id}`.
+
+Résultats attendus :
+- Réponse HTTP `200 OK`
+- La ressource supprimée n’apparaît plus lors d’un `GET /resources`
+- La tâche de suppression est consultable via un `GET /tasks/{task_id}`
+- La VM n'apparaît plus sur le dashboard Horizon.
+
 
 
 
