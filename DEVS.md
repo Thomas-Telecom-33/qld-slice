@@ -199,6 +199,11 @@ Récupérer l’`id` depuis la ressource POSTée :
 
 ## ÉTAPE 6 — Adaptation de la base de données
 
+### Installer la bibliothèque Python nécessaire :
+```bash
+pip install openstacksdk
+```
+
 ### Script de récupération OpenStack :
 
 ```python
@@ -405,11 +410,6 @@ nano ~/.config/openstack/clouds.yaml
 ```
 
 Puis coller le contenu du fichier `clouds.yaml`.
-
-Installer la bibliothèque Python nécessaire :
-```bash
-pip install openstacksdk
-```
 
 ---
 
