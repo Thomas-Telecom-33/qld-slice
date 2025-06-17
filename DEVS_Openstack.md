@@ -662,3 +662,26 @@ Et également à son arrêt :
 ```
 
 ═══════════════════════════════════════════════════════════════════════════════════
+
+## 10 — Conclusion
+
+Le backend SLICES est désormais connecté à l'infrastructure `OpenStack`.
+
+#### Grâce à l’intégration mise en place, le système est capable de :
+
+- `Créer` dynamiquement des machines virtuelles (VM) sur demande,
+
+- `Supprimer` proprement des VM existantes,
+
+- `Suivre` en temps réel l’état de chaque tâche grâce à Redis et TaskIQ.
+
+
+#### Cette architecture repose sur le SDK officiel d’OpenStack (openstacksdk).
+
+Il est désormais facile d’ajouter de nouvelles fonctionnalités telles que :
+
+- Le `redémarrage` (reboot) de machines virtuelles,
+
+- La prise de `snapshot` ou la sauvegarde d’instances.
+
+═══════════════════════════════════════════════════════════════════════════════════
