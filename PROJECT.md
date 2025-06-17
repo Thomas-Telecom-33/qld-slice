@@ -110,6 +110,7 @@ TODO :
   - Chaque utilisateur doit téléverser son clouds.yaml une seule fois via le frontend.
   - Ce fichier est stocké côté backend, lié à son compte (base de données ou fichier privé).
   - Lors d'une action (ex: création de VM), le backend utilise automatiquement ce fichier.
+    
 ═══════════════════════════════════════════════════════════════════════════════════
 ## 🔒 PHASE 6 — Sécurité, Permissions et Logs
 ═══════════════════════════════════════════════════════════════════════════════════
