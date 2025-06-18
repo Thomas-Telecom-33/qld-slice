@@ -133,7 +133,7 @@ kubectl logs nginx-test
 On a notre premier pod :
 > nginx-test   1/1     Running   0   16m
 
-
+---
 
 ## 3. Services
 Les pods sont éphémères et non accessibles de l’extérieur par défaut.
