@@ -1,5 +1,7 @@
 # K8S_BASICS
 
+═══════════════════════════════════════════════════════════════════════════════════
+
 ## 1. Installations nécessaires
 
 Créer un dossier de travail pour le projet Kubernetes
@@ -66,7 +68,7 @@ minikube version
 ```
 > minikube version: v1.36.0  
 
----
+═══════════════════════════════════════════════════════════════════════════════════
 
 ## 2. Initialisation
 
@@ -133,7 +135,7 @@ kubectl logs nginx-test
 On a notre premier pod :
 > nginx-test   1/1     Running   0   16m
 
----
+═══════════════════════════════════════════════════════════════════════════════════
 
 ## 3. Services
 Les pods sont éphémères et non accessibles de l’extérieur par défaut.
@@ -189,3 +191,91 @@ minikube service nginx-service
 ```
 On peut accéder à NGINX via le navigateur à une URL comme :
 > http://127.0.0.1:36615/
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+## 4. Deployment
+
+Un **Deployment** est un objet Kubernetes qui :
+- Gère la création et la mise à jour de Pods.
+- Permet de déployer une réplique de ton application (1, 2, 3 pods… ou plus).
+- Gère le remplacement automatique d’un pod si un conteneur tombe (self-healing).
+- Permet des mises à jour sans interruption (rolling updates).
+
+---
+
+### 4.1. Créer un fichier de configuration `nginx-deployment.yaml`
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+```
+
+---
+
+### 4.2. Appliquer le fichier de déploiement
+```bash
+kubectl apply -f nginx-deployment.yaml
+```
+
+Affiche les déploiements actifs :
+```bash
+k get deployment
+```
+
+Supprimer un pod manuellement
+Simule une panne pour tester l’auto-réparation :
+```bash
+kubectl delete pod <pod_name>
+```
+
+Kubernetes recrée automatiquement un pod si nécessaire.
+
+Lister les pods du déploiement
+```bash
+k get pods
+```
+
+---
+
+### Mise à jour avec un rolling update
+Met à jour l'image de Nginx :
+```bash
+kubectl set image deployment/nginx-deployment nginx=nginx:1.25
+```
+
+Suivre l'état de la mise à jour :
+```bash
+kubectl rollout status deployment/nginx-deployment
+```
+
+Revenir à la version précédente si besoin :
+```bash
+kubectl rollout undo deployment/nginx-deployment
+```
+
+4.8. Obtenir des détails
+```bash
+kubectl describe deployment nginx-deployment
+```
+
+Supprimer le déploiement (optionnel)
+```bash
+kubectl delete deployment nginx-deployment
+```
