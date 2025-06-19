@@ -104,11 +104,11 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 
 ⚙️ Étape 1 : Installation & configuration du cluster Kubernetes dans la VM
 
- 1.1 Choisir l’outil adapté (recommandé : Minikube ou K3s)
+ ✅1.1 Choix de Minikube
  
- 1.2 Installer Kubernetes dans la VM
+ ✅1.2 Installer Kubernetes dans la VM
  
- 1.3 Vérifier accès avec kubectl get nodes
+ ✅1.3 Vérifier accès avec kubectl get nodes
  
  1.4 S’assurer que le fichier ~/.kube/config est utilisable par le conteneur VSCode
  
