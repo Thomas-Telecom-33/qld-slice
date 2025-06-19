@@ -112,6 +112,14 @@ spec:
         - containerPort: 80
 ```
 
+> Crée un Pod nommé nginx-test.
+> 
+> Contient un seul container basé sur l'image officielle nginx.
+>
+> Expose le port 80 à l’intérieur du Pod.
+>
+> C’est la brique de base de Kubernetes, non répliquée, non auto-réparée.
+
 Déployer le Pod dans le cluster :
 ```bash
 k apply -f nginx-pod.yaml
@@ -124,12 +132,12 @@ k get pods
 
 Afficher les détails du Pod :
 ```bash
-kubectl describe pod nginx-test
+k describe pod nginx-test
 ```
 
 Voir les logs du conteneur dans le Pod :
 ```bash
-kubectl logs nginx-test
+k logs nginx-test
 ```
 
 On a notre premier pod :
@@ -162,9 +170,17 @@ spec:
       nodePort: 30080
 ```
 
+> Crée un Service de type NodePort nommé nginx-service.
+>
+> Relie les requêtes entrantes sur le port 30080 du node au port 80 du container NGINX.
+>
+> Utilise le label app=nginx pour cibler le bon Pod.
+>
+> Permet d’accéder à l’application depuis l’extérieur du cluster.
+
 Label :
 ```bash
-kubectl label pod nginx-test app=nginx
+k label pod nginx-test app=nginx
 ```
 
 On lance le service :
@@ -175,7 +191,7 @@ k apply -f nginx-service.yaml
 
 On check :
 ```bash
-kubectl get svc
+k get svc
 ```
 > nginx-service   NodePort  ...
 
@@ -227,11 +243,21 @@ spec:
             - containerPort: 80
 ```
 
+> Définit un Deployment nommé nginx-deployment.
+>
+> Lance 2 réplicas du Pod (pour la redondance).
+>
+> Gère automatiquement les mises à jour et remplacements de Pods.
+>
+> Repose sur les mêmes labels app=nginx pour la sélection.
+>
+> Utilise l’image nginx:latest (modifiable pour rolling update)
+
 ---
 
 ### 4.2. Appliquer le fichier de déploiement
 ```bash
-kubectl apply -f nginx-deployment.yaml
+k apply -f nginx-deployment.yaml
 ```
 
 Affiche les déploiements actifs :
@@ -242,7 +268,7 @@ k get deployment
 Supprimer un pod manuellement
 Simule une panne pour tester l’auto-réparation :
 ```bash
-kubectl delete pod <pod_name>
+k delete pod <pod_name>
 ```
 
 Kubernetes recrée automatiquement un pod si nécessaire.
@@ -257,25 +283,214 @@ k get pods
 ### Mise à jour avec un rolling update
 Met à jour l'image de Nginx :
 ```bash
-kubectl set image deployment/nginx-deployment nginx=nginx:1.25
+k set image deployment/nginx-deployment nginx=nginx:1.25
 ```
 
 Suivre l'état de la mise à jour :
 ```bash
-kubectl rollout status deployment/nginx-deployment
+k rollout status deployment/nginx-deployment
 ```
 
 Revenir à la version précédente si besoin :
 ```bash
-kubectl rollout undo deployment/nginx-deployment
+k rollout undo deployment/nginx-deployment
 ```
 
 4.8. Obtenir des détails
 ```bash
-kubectl describe deployment nginx-deployment
+k describe deployment nginx-deployment
 ```
 
 Supprimer le déploiement (optionnel)
 ```bash
-kubectl delete deployment nginx-deployment
+k delete deployment nginx-deployment
 ```
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+## 5. Namespace 
+
+### Objectif :
+Organiser les ressources dans un cluster Kubernetes en isolant les environnements (dev, test, prod...)
+
+---
+
+Lister les namespaces existants
+```bash
+k get namespaces
+```
+
+Créer un namespace spécifique
+```bash
+k create namespace demo
+```
+> namespace/demo created
+
+Déployer un Pod dans ce namespace
+
+Créer un fichier :
+```bash
+nano nginx-ns.yaml
+```
+
+Contenu :
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-demo
+  namespace: demo
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+```
+
+> Crée un Pod dans un namespace personnalisé (demo).
+>
+> Montre comment isoler les ressources dans différents environnements.
+>
+> Nécessite que le namespace demo soit créé au préalable.
+>
+> Fonctionne comme un Pod classique mais placé dans un espace logique dédié.
+
+Appliquer la configuration dans le namespace
+```bash
+k apply -f nginx-ns.yaml
+```
+> pod/nginx-demo created
+
+Vérifier que le pod est bien dans le namespace demo
+```bash
+k get pods -n demo
+```
+> nginx-demo   1/1     Running   0          23s
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+## 6. ConfigMaps & Secrets
+
+### Objectif :
+Injecter des variables de configuration et des données sensibles dans les Pods Kubernetes de manière sécurisée.
+
+---
+
+### 6.1 ConfigMap
+
+Une **ConfigMap** permet d'injecter des variables de configuration non sensibles dans des pods.  
+Elle est utile pour externaliser les paramètres de configuration d'une application.
+
+Créer une ConfigMap à partir de valeurs en ligne :
+```bash
+k create configmap demo-config \
+  --from-literal=APP_ENV=development \
+  --from-literal=APP_VERSION=1.0
+```
+
+Afficher le contenu YAML de la ConfigMap :
+```bash
+k get configmap demo-config -o yaml
+```
+
+---
+
+### 6.2 Secret
+
+Un **Secret** permet de stocker des données sensibles (mots de passe, clés API, etc.) de manière encodée.
+
+Créer un Secret avec des valeurs sensibles :
+```bash
+k create secret generic demo-secret \
+  --from-literal=DB_USER=admin \
+  --from-literal=DB_PASSWORD=s3cr3t
+```
+
+Afficher le contenu YAML du Secret :
+```bash
+kubectl get secret demo-secret -o yaml
+```
+
+---
+
+### 6.3 Utiliser ConfigMap et Secret dans un Pod
+
+Créer un fichier de configuration :
+```bash
+nano nginx-env.yaml
+```
+
+Contenu du fichier :
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-config-demo
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      env:
+        - name: ENV
+          valueFrom:
+            configMapKeyRef:
+              name: demo-config
+              key: APP_ENV
+        - name: VERSION
+          valueFrom:
+            configMapKeyRef:
+              name: demo-config
+              key: APP_VERSION
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: demo-secret
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: demo-secret
+              key: DB_PASSWORD
+```
+
+> Crée un Pod nommé nginx-config-demo avec des variables d’environnement injectées.
+>
+> Récupère :
+>
+> - ENV et VERSION depuis une ConfigMap (demo-config).
+>
+> - DB_USERNAME et DB_PASSWORD depuis un Secret (demo-secret).
+>
+> Ce Pod montre comment découpler configuration et code, de manière sécurisée.
+
+Déployer le Pod avec ConfigMap et Secret :
+```bash
+k apply -f nginx-env.yaml
+```
+
+---
+
+### 6.4 Vérifier les variables injectées
+
+Entrer dans le conteneur pour consulter les variables d'environnement :
+```bash
+k exec -it nginx-config-demo -- /bin/bash
+```
+
+Puis :
+```bash
+env | grep -E 'ENV|VERSION|DB_'
+```
+
+Exemple de sortie :
+```bash
+DB_PASSWORD=s3cr3t
+ENV=development
+DB_USERNAME=admin
+VERSION=1.0
+```
+
+═══════════════════════════════════════════════════════════════════════════════════
