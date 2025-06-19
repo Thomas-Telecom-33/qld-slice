@@ -63,7 +63,7 @@ Outil pour exécuter un cluster Kubernetes local à des fins de test.
 Télécharge puis installe `minikube` :
 ```bash
 curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
-sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
 minikube version
 ```
 > minikube version: v1.36.0  
