@@ -281,6 +281,8 @@ k get pods
 ---
 
 ### 4.3 Mise à jour avec un rolling update
+Mettre à jour une application (changement d’image, de version, de config…) sans temps d’arrêt pour les utilisateurs.
+
 Met à jour l'image de Nginx :
 ```bash
 k set image deployment/nginx-deployment nginx=nginx:1.25
