@@ -280,7 +280,7 @@ k get pods
 
 ---
 
-### Mise à jour avec un rolling update
+### 4.3 Mise à jour avec un rolling update
 Met à jour l'image de Nginx :
 ```bash
 k set image deployment/nginx-deployment nginx=nginx:1.25
@@ -296,7 +296,7 @@ Revenir à la version précédente si besoin :
 k rollout undo deployment/nginx-deployment
 ```
 
-4.8. Obtenir des détails
+Obtenir des détails
 ```bash
 k describe deployment nginx-deployment
 ```
