@@ -102,96 +102,15 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 ═══════════════════════════════════════════════════════════════════════════════════
 ## 🐳 PHASE 4 — Déploiement Kubernetes
 
-⚙️ Étape 1 : Installation & configuration du cluster Kubernetes dans la VM
-
- ✅1.1 Choix de Minikube
- 
- ✅1.2 Installer Kubernetes dans la VM
- 
- ✅1.3 Vérifier accès avec kubectl get nodes
- 
- 1.4 S’assurer que le fichier ~/.kube/config est utilisable par le conteneur VSCode
- 
- 1.5 Tester dans VSCode : kubectl get pods fonctionne dans le terminal du conteneur
-
----
+⚙️ Étape 1 : Installation & configuration du cluster Kubernetes
 
 🧠 Étape 2 : Créer le backend kubernetes_backend.py
 
- 2.1 Créer un fichier src/slices_bi_blueprint_backend/infrastructure/kubernetes_backend.py
- 
- 2.2 Y définir :
-connect_k8s() : initialise le client Kubernetes Python (config.load_kube_config())
-create_pod(name, image, command, env) → retourne le nom du pod
-delete_pod(name)
-
- 2.3 Implémenter wait_for_pod_ready(name) si nécessaire
-
----
-
 🧩 Étape 3 : Étendre tasks/compute_resource.py
-
- 3.1 Dans create_compute_resource, ajouter :
-Dispatch : if flavor.flavor_type == "k8s": ...
-
- 3.2 Appeler create_pod() à la place de create_vm()
-
- 3.3 Mettre model_vm.provider_resource_id = pod_name
-
- 3.4 Adapter la partie delete_compute_resource pour appeler delete_pod() si flavor_type == "k8s"
-
----
 
 🧱 Étape 4 : Vérifications côté modèles & schémas
 
- 4.1 Assurer que :
-
-Les flavors pour Kubernetes ont "flavor_type": "k8s"
-request_config contient "image" et autres infos utiles
-
- 4.2 Aucun changement requis dans les modèles SQL ni endpoints REST — parfait
-
----
-
 🧪 Étape 5 : Tests et validation de bout en bout
-
- 5.1 Créer un flavor K8s et une image de test
-
- 5.2 Utiliser le script de test modifié avec flavor_type "k8s"
-
- 5.3 Vérifier :
-Création de pod visible dans kubectl
-Retour 200 de l’API
-Logs du backend corrects
-
- 5.4 Supprimer la ressource → pod détruit ?
-
----
-
-🧹 Étape 6 : Robustesse et finalisation
-
- 6.1 Gérer les erreurs dans create_pod() (CrashLoop, Pending…)
-
- 6.2 Ajouter des logs explicites dans le backend
-
- 6.3 Rendre le code générique pour d'autres types de containers
-
- 6.4 (Optionnel) Permettre de passer des volumes, env, ou resources via request_config
-
----
-
-🗂️ Étape 7 : Documentation
-
- 7.1 Mettre à jour le fichier PROJECT.md
-
- 7.2 Mettre à jour DEVS_k8s.md
-
-
-
-
-
-
-
 
 
 ═══════════════════════════════════════════════════════════════════════════════════
