@@ -115,3 +115,37 @@ kubectl get nodes
 ═══════════════════════════════════════════════════════════════════════════════════
 
 
+
+## Etape 2 - Création de kubernetes_backend.py
+Dans la même logique qu'avec Openstack, on créer le fichier kubernetes_backend.py dans l'arboréseance infrastructure.
+L'objectif :
+....
+....
+
+### 2.1 Installation du client kubernets
+```bash
+pip install kubernetes
+```
+
+### 2.2 Script de kubernetes_backend.py
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
