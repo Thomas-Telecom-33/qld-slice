@@ -3,8 +3,11 @@
 
 ═══════════════════════════════════════════════════════════════════════════════════
 
+
 ## ÉTAPE 1 — Installations nécessaires
 sudo apt update && sudo apt upgrade -y
+
+---
 
 ### 1.1 kubectl 
 Outil en ligne de commande pour interagir avec un cluster Kubernetes.
@@ -31,6 +34,8 @@ echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
 source ~/.bashrc
 ```
 
+---
+
 ### 1.2 Minikube
 Outil pour exécuter un cluster Kubernetes local à des fins de test.
 
@@ -42,9 +47,11 @@ minikube version
 ```
 > minikube version: v1.36.0  
 
-### 1.3 Cluster Kubernets
+---
 
-Créer un container docker pour Kubernets :
+### 1.3 Cluster Kubernetes
+
+Créer un container docker pour Kubernetes :
 ```bash
 minikube start --driver=docker
 ```
@@ -53,40 +60,58 @@ Check :
 ```bash
 minikube status
 ```
-> minikube
-> type: Control Plane
-> host: Running
-> kubelet: Running
-> apiserver: Running
+> minikube  
+> type: Control Plane  
+> host: Running  
+> kubelet: Running  
+> apiserver: Running  
 > kubeconfig: Configured
 
 Puis :
 ```bash
 k get nodes
 ```
-> minikube   Ready    control-plane   55s   v1.33.1
+> minikube   Ready    control-plane   55s   v1.33.1  
 > On a alors un noeud minikube avec le statut Ready.
 
 Puis :
 ```bash
-mkdir -p ~/kube-share
-cp ~/.kube/config ~/kube-share/config
+mkdir -p /home/ubuntu/shared-kube
+cp ~/.kube/config /home/ubuntu/shared-kube/config
 ```
 
 Côté Vscode :
 
-- docker-compose.yml à adapter :
+- docker-compose.yml à adapter :  
 Les volumes :
-```python
+```yaml
 volumes:
-      - ../..:/workspaces:cached
-      - ~/.kube:/home/ubuntu/.kube:ro
-      - ~/.minikube:/home/ubuntu/.minikube:ro
+  - ../..:/workspaces:cached
+  - /home/ubuntu/shared-kube:/home/vscode/.kube:ro
+  - ~/.minikube:/home/vscode/.minikube:ro
 ```
 
-- dockerfile à adapter :
-  Avec les commandes vus précédemment.
+Et également :
+```yaml
+network_mode: host
+```
+Vscode peut joindre l’API K8s de Minikube à 192.168.49.2:8443
 
+- dockerfile à adapter :  
+  Avec les commandes vues précédemment.
 
+- .env :
+```
+REDIS_SERVER=localhost
+POSTGRES_SERVER=localhost
+```
+
+Puis rebuild puis vérif :
+```bash
+kubectl get nodes
+```
+> minikube   Ready    control-plane   37m   v1.33.1
+
+═══════════════════════════════════════════════════════════════════════════════════
 
 
