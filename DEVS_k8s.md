@@ -3,9 +3,10 @@
 
 ═══════════════════════════════════════════════════════════════════════════════════
 
-
 ## ÉTAPE 1 — Installations nécessaires
+```bash
 sudo apt update && sudo apt upgrade -y
+```
 
 ---
 
@@ -23,8 +24,6 @@ Vérifie la version cliente installée de `kubectl` :
 ```bash
 kubectl version --client
 ```
-> Client Version: v1.33.1  
-> Kustomize Version: v5.6.0
 
 Raccourcis pratiques :  
 Crée un alias `k` pour `kubectl` et active l'autocomplétion :
@@ -45,7 +44,6 @@ curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikub
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
 minikube version
 ```
-> minikube version: v1.36.0  
 
 ---
 
@@ -56,49 +54,32 @@ Créer un container docker pour Kubernetes :
 minikube start --driver=docker
 ```
 
-Check :
+Vérification :
 ```bash
 minikube status
 ```
-> minikube  
-> type: Control Plane  
-> host: Running  
-> kubelet: Running  
-> apiserver: Running  
-> kubeconfig: Configured
 
 Puis :
 ```bash
-k get nodes
+kubectl get nodes
 ```
-> minikube   Ready    control-plane   55s   v1.33.1  
-> On a alors un noeud minikube avec le statut Ready.
 
-Puis :
+Puis copie du fichier de configuration :
 ```bash
 mkdir -p /home/ubuntu/shared-kube
 cp ~/.kube/config /home/ubuntu/shared-kube/config
 ```
 
-Côté Vscode :
+Configuration dans VSCode :
 
-- docker-compose.yml à adapter :  
-Les volumes :
+- docker-compose.yml :
 ```yaml
 volumes:
   - ../..:/workspaces:cached
   - /home/ubuntu/shared-kube:/home/vscode/.kube:ro
   - ~/.minikube:/home/vscode/.minikube:ro
-```
-
-Et également :
-```yaml
 network_mode: host
 ```
-Vscode peut joindre l’API K8s de Minikube à 192.168.49.2:8443
-
-- dockerfile à adapter :  
-  Avec les commandes vues précédemment.
 
 - .env :
 ```
@@ -106,46 +87,125 @@ REDIS_SERVER=localhost
 POSTGRES_SERVER=localhost
 ```
 
-Puis rebuild puis vérif :
+Rebuild du conteneur puis :
 ```bash
 kubectl get nodes
 ```
-> minikube   Ready    control-plane   37m   v1.33.1
 
 ═══════════════════════════════════════════════════════════════════════════════════
 
+## Étape 2 — Création de kubernetes_backend.py
 
+Créer `kubernetes_backend.py` dans `infrastructure`.
 
-## Etape 2 - Création de kubernetes_backend.py
-Dans la même logique qu'avec Openstack, on créer le fichier kubernetes_backend.py dans l'arboréseance infrastructure.
-L'objectif :
-....
-....
+Objectif : permettre la gestion d’un pod (Kubernetes) via les appels backend.
 
-### 2.1 Installation du client kubernets
+Installation du client Kubernetes Python :
 ```bash
 pip install kubernetes
 ```
 
-### 2.2 Script de kubernetes_backend.py
+Le fichier inclura :
+- Fonction de création d’un pod (avec image depuis disk_image.location)
+- Fonction de suppression du pod
+- Utilisation du nom comme identifiant unique
+- Namespace : `default`
 
+═══════════════════════════════════════════════════════════════════════════════════
 
+## Étape 3 — Adaptations dans tasks/compute_resources.py
 
+Dans la fonction `create_compute_resource` :
+- détecter si flavor correspond à un pod k8s (par ex. via son friendly_name ou autre stratégie)
+- appeler `kubernetes_backend.create_pod(...)`
 
+Dans la fonction `delete_compute_resource` :
+- appeler `kubernetes_backend.delete_pod(...)` si c’est un pod K8s
 
+═══════════════════════════════════════════════════════════════════════════════════
 
+## Étape 4 — Ajout des images et flavors
 
+### 4.1 Images
 
+POST d’une image utilisée uniquement comme "référence logique" pour Kubernetes :
 
+```json
+{
+  "friendly_name": "nginx-k8s",
+  "cluster_id": "default",
+  "location": "nginx",
+  "default_username": "n/a",
+  "min_disk_mb": 0,
+  "min_ram_mib": 0,
+  "short_description": "Docker image for Kubernetes",
+  "long_description": "Official Docker image for NGINX, used for Kubernetes pod deployment.",
+  "tags": ["k8s", "nginx", "docker"],
+  "hidden": false
+}
+```
 
+### 4.2 Flavors
 
+POST d’un flavor dédié aux pods Kubernetes :
 
+```json
+{
+  "friendly_name": "k8s-nginx",
+  "description": "Kubernetes pod running Nginx",
+  "flavor_type": "vm",
+  "ram_mib": 0,
+  "vcpus": 0,
+  "disk_mb": 0
+}
+```
 
+Note : on conserve `flavor_type: vm` pour éviter des modifications trop profondes dans le backend.
 
+═══════════════════════════════════════════════════════════════════════════════════
 
+## Étape 5 — Tests de création et suppression
 
+### 5.1 POST
 
+```json
+{
+  "expires_at": "2025-06-24T08:20:00Z",
+  "resources": [
+    {
+      "friendly_name": "nginx-pod-test",
+      "disk_image_id": "image_tld-city-bp1_xxx",
+      "flavor_id": "flavor_tld-city-bp1_xxx",
+      "network_name": "default",
+      "userdata": ""
+    }
+  ],
+  "ssh_authorized_keys": [
+    "..."
+  ],
+  "tokens": [
+    {
+      "jwt": "..."
+    }
+  ]
+}
+```
 
+Explication : même si le pod ne démarre pas d’image OpenStack, il faut fournir un `disk_image_id` et `flavor_id` pour rester cohérent avec les modèles REST.
 
+Validation :
+```bash
+kubectl get pods
+```
 
+### 5.2 DELETE
 
+Récupérer l’ID de la ressource, puis appeler l’API DELETE.
+
+Validation :
+```bash
+kubectl get pods
+```
+Résultat : le pod ne figure plus dans la liste.
+
+═══════════════════════════════════════════════════════════════════════════════════
