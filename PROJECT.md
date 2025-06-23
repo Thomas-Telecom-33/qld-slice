@@ -112,6 +112,7 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 
 🧪 Étape 5 : Tests et validation de bout en bout
 
+Tout est fonctionnel et intégré comme Openstack.
 
 ═══════════════════════════════════════════════════════════════════════════════════
 ## 🌐 PHASE 5 — Interface Frontend (UI)
