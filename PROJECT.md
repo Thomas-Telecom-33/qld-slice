@@ -98,9 +98,12 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 - Création réelle de VMs.
 - Suppresion réelle de Vms.
 - Infrastructure Openstack connectée et conforme aux attentes du projet.
+- DEVS_OPENSTACK.md
 
 ═══════════════════════════════════════════════════════════════════════════════════
 ## 🐳 PHASE 4 — Déploiement Kubernetes
+
+### ✅ Avancement
 
 ⚙️ Étape 1 : Installation & configuration du cluster Kubernetes
 
@@ -112,7 +115,10 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 
 🧪 Étape 5 : Tests et validation de bout en bout
 
-Tout est fonctionnel et intégré comme Openstack.
+### 📦 Livrables
+- Création réelle de pods/containers.
+- Suppresion réelle de pods/containers.
+- DEVS_KUBERNETES.md
 
 ═══════════════════════════════════════════════════════════════════════════════════
 ## 🌐 PHASE 5 — Interface Frontend (UI)
