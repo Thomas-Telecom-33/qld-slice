@@ -105,15 +105,15 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 
 ### ✅ Avancement
 
-⚙️ Étape 1 : Installation & configuration du cluster Kubernetes
+Étape 1 : Installation & configuration du cluster Kubernetes
 
-🧠 Étape 2 : Créer le backend kubernetes_backend.py
+Étape 2 : Créer le backend kubernetes_backend.py
 
-🧩 Étape 3 : Étendre tasks/compute_resource.py
+Étape 3 : Étendre tasks/compute_resource.py
 
-🧱 Étape 4 : Vérifications côté modèles & schémas
+Étape 4 : Vérifications côté modèles & schémas
 
-🧪 Étape 5 : Tests et validation de bout en bout
+Étape 5 : Tests et validation de bout en bout
 
 ### 📦 Livrables
 - Création réelle de pods/containers.
