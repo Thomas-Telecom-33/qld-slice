@@ -121,6 +121,43 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 - DEVS_KUBERNETES.md
 
 ═══════════════════════════════════════════════════════════════════════════════════
+
+## 📊 PHASE 5 — Intégration du MRS (Metadata Registry System)
+
+### 🎯 Objectifs
+- Comprendre le fonctionnement du MRS dans l'écosystème SLICES-RI.
+- Ajouter au backend un module permettant de publier des métadonnées dans le MRS après chaque création de ressource (VM/pod).
+- Automatiser l’enregistrement de ces métadonnées depuis les tâches existantes (compute_resource.py).
+- Garantir la conformité au format d’objet attendu par le MRS (base/service/dataset...).
+- Sécuriser les appels MRS avec un token (JWT).
+
+### ✅ Avancement
+
+Étape 1 — Analyse technique
+
+Étape 2 — Préparation du client MRS
+
+Étape 3 — Génération du payload
+
+Étape 4 — Intégration dans compute_resource.py
+
+Étape 5 — Test et validation
+
+
+
+### 📦 Livrables
+- Un fichier de configuration MRS (URL, audience MRS, etc.)
+- Un module mrs_client.py ou équivalent dans utils/ ou services/.
+- Appels MRS automatiques depuis les tâches de création (create_compute_resource)
+- Validation manuelle de la présence des métadonnées dans l’instance MRS.
+- Un MRS_DEV.md décrivant l’intégration.
+- (optionnel) Endpoint d’exploration interne /metadata/ pour tester localement les payloads.
+
+
+
+
+
+
 ## 🌐 PHASE 5 — Interface Frontend (UI)
 Front-end avec spécifications à venir.
 
