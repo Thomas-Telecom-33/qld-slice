@@ -90,11 +90,11 @@ Pour vérifier que tout est build :
 ```bash
 docker ps
 ```
-> Backend API	9001	http://localhost:9001	✅
+> Backend API	9001	http://localhost:9001	
 >
-> Frontend SPA	9002	http://localhost:9002	✅
+> Frontend SPA	9002	http://localhost:9002	
 > 
-> Keycloak (IDP)	9003	http://localhost:9003	✅
+> Keycloak (IDP)	9003	http://localhost:9003	
 > 
-> PgAdmin	9004	http://localhost:9004	✅
+> PgAdmin	9004	http://localhost:9004	
 
