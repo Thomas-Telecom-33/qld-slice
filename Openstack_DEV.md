@@ -238,7 +238,7 @@ if __name__ == "__main__":
 Exemple image :
 ```json
 {
-  "friendly_name": "Ubuntu Server 20.04",
+  "friendly_name": "ubuntu-server-20.04",
   "cluster_id": "default",
   "location": "ubuntu-server-20.04",
   "default_username": "ubuntu",
@@ -254,7 +254,7 @@ Exemple image :
 Exemple flavor :
 ```json
 {
-  "friendly_name": "Flavor-4",
+  "friendly_name": "flavor-4",
   "description": "Openstack Flavor4 : ID : XXXXX",
   "flavor_type": "vm",
   "ram_mib": 2048,
