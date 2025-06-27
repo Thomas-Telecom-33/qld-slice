@@ -50,13 +50,7 @@ a. Fixer l'image de Keycloak :
 image: quay.io/keycloak/keycloak:26.0.0
 ```
 
-b. Supprimer --import-realm de la commande Keycloak:
-On a alors :
-```python
-  command: start-dev
-```
-
-c. Remplacer KEYCLOAK_ADMIN et KEYCLOAK_ADMIN_PASSWORD par :
+b. Remplacer KEYCLOAK_ADMIN et KEYCLOAK_ADMIN_PASSWORD par :
 ```python
 KC_BOOTSTRAP_ADMIN_USERNAME: admin
 KC_BOOTSTRAP_ADMIN_PASSWORD: ${MRS_C_KEYCLOAK_ADMIN_PASSWORD}
