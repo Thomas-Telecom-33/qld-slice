@@ -3,7 +3,7 @@
 ═══════════════════════════════════════════════════════════════════════════════════
 ## ÉTAPE 1 — Installations nécessaires
 
-1. Cloner le dépôt
+### 1.1 Cloner le dépôt
 ```bash
 git clone https://gitlab.inria.fr/slices-ri/mrs.git
 ```
@@ -12,7 +12,7 @@ Puis :
 cd mrs/infra/localhost-ports
 ```
 
-2. Créer le fichier .env :
+### 1.2 Créer le fichier .env :
 ```env
 MRS_C_BACKEND_PORT=9001
 MRS_C_PORTAL_PORT=9002
@@ -31,7 +31,7 @@ MCR_C_DB_UP_BACKEND=mrsdbpass
 MCR_C_DB_UP_KEYCLOAK=keycloakpass
 ```
 
-3. Nettoyer le fichier slices.realm.json
+### 1.3 Nettoyer le fichier slices.realm.json
 Certaines propriétés ne sont plus supportées dans la version actuelle de Keycloak. 
 ```bash
 jq 'del(
@@ -44,7 +44,7 @@ jq 'del(
 )' containers/keycloak/slices.realm.json > tmp && mv tmp containers/keycloak/slices.realm.json
 ```
 
-4. Modifier compose.yml
+### 1.4 Modifier compose.yml de cette façon
 ```python
 version: '3'
 
@@ -154,7 +154,7 @@ volumes:
   pgadmin_data:
 ```
 
-7. Démarrage minimal pour le Keyloack :
+### 1.5 Démarrage minimal pour le Keyloack :
 ```bash
 docker compose up -d database idp
 ```
@@ -168,23 +168,33 @@ Utilisateur : admin
 Mot de passe : admin123 (via .env → KC_BOOTSTRAP_ADMIN_PASSWORD)
 ```
 
-7. Une fois connecté à Keycloak :
+### 1.6 Une fois connecté à Keycloak :
 
-Selectionner SLICES
+- Selectionner SLICES en haut à gauche.
 
-Client
-Ajout d'un client
+Ajout d'un client : 
 
+Clients > Create Client
+Client ID : `slices-mrs-backend-swagger`
+Client Auth : `ON`
+Root URL : `http://localhost:9001`
+Valid redirect URIs : `http://localhost:9001/swagger/oauth2-redirect.html`
+Web origins : `+`
+Puis save.
 
-Realm settings 
+Le client est alors crée.
+
+On peut récupérer son mot de passe dans la catégorie `Credentials`.
+
+- Puis aller dans Realm settings :
 Frontend URL 
 ```bash
 http://localhost:9003
 ```
 
-, lancer les autres containers :
+### 1.7 Lancement des containers
 ```bash
-docker compose up -d --build backend portal pgadmin
+docker compose up -d
 ```
 
 Pour vérifier que tout est build :
@@ -198,4 +208,11 @@ docker ps
 > Keycloak (IDP)	9003	http://localhost:9003	
 > 
 > PgAdmin	9004	http://localhost:9004	
+
+### 1.8 Accès au swaguer http://localhost:9001/ :
+Bouton `Authorize` et se connecter avec le client.
+
+On est alors authentifié sur le swaguer.
+
+
 
