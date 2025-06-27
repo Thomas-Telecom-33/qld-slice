@@ -13,6 +13,8 @@ Puis :
 cd mrs/infra/localhost-ports
 ```
 
+---
+
 ### 1.2 Créer le fichier .env :
 ```env
 MRS_C_BACKEND_PORT=9001
@@ -32,6 +34,8 @@ MCR_C_DB_UP_BACKEND=mrsdbpass
 MCR_C_DB_UP_KEYCLOAK=keycloakpass
 ```
 
+---
+
 ### 1.3 Nettoyer le fichier slices.realm.json
 Certaines propriétés ne sont plus supportées dans la version actuelle de Keycloak. 
 ```bash
@@ -44,6 +48,8 @@ jq 'del(
   .adminPermissionsEnabled
 )' containers/keycloak/slices.realm.json > tmp && mv tmp containers/keycloak/slices.realm.json
 ```
+
+---
 
 ### 1.4 Modifier compose.yml de cette façon
 ```python
@@ -155,6 +161,8 @@ volumes:
   pgadmin_data:
 ```
 
+---
+
 ### 1.5 Démarrage minimal pour le Keyloack :
 ```bash
 docker compose up -d database idp
@@ -168,6 +176,8 @@ Utilisateur : admin
 ```python
 Mot de passe : admin123 (via .env → KC_BOOTSTRAP_ADMIN_PASSWORD)
 ```
+
+---
 
 ### 1.6 Une fois connecté à Keycloak :
 
@@ -193,6 +203,8 @@ Frontend URL
 http://localhost:9003
 ```
 
+---
+
 ### 1.7 Lancement des containers
 ```bash
 docker compose up -d
@@ -208,7 +220,9 @@ docker ps
 > 
 > Keycloak (IDP)	9003	http://localhost:9003	
 > 
-> PgAdmin	9004	http://localhost:9004	
+> PgAdmin	9004	http://localhost:9004
+
+---
 
 ### 1.8 Accès au swaguer http://localhost:9001/ :
 Bouton `Authorize` et se connecter avec le client.
