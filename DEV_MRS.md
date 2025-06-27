@@ -1,6 +1,7 @@
 # SLICES BI Blueprint integration of MRS
 
 ═══════════════════════════════════════════════════════════════════════════════════
+
 ## ÉTAPE 1 — Installations nécessaires
 
 ### 1.1 Cloner le dépôt
@@ -213,6 +214,3 @@ docker ps
 Bouton `Authorize` et se connecter avec le client.
 
 On est alors authentifié sur le swaguer.
-
-
-
