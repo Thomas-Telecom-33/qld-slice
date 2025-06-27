@@ -45,20 +45,113 @@ jq 'del(
 ```
 
 4. Modifier compose.yml
-a. Fixer l'image de Keycloak :
 ```python
-image: quay.io/keycloak/keycloak:26.0.0
-```
+version: '3'
 
-b. Remplacer KEYCLOAK_ADMIN et KEYCLOAK_ADMIN_PASSWORD par :
-```python
-KC_BOOTSTRAP_ADMIN_USERNAME: admin
-KC_BOOTSTRAP_ADMIN_PASSWORD: ${MRS_C_KEYCLOAK_ADMIN_PASSWORD}
-```
+name: slices-mrs-localhost-ports
 
-5. Nettoyage total avant build
-```bash
-docker compose down -v
+services:
+  database:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: ${MRS_C_POSTGRES_PASSWORD}
+      MCR_C_DB_UP_BACKEND: ${MCR_C_DB_UP_BACKEND}
+      MCR_C_DB_UP_KEYCLOAK: ${MCR_C_DB_UP_KEYCLOAK}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - source: '../containers/postgres/init/'
+        target: '/docker-entrypoint-initdb.d/'
+        read_only: true
+        type: 'bind'
+    healthcheck:
+      test: pg_isready
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  backend:
+    # Delay until database is healthy, else the initial migration fails and the container crashes
+    depends_on:
+      database:
+        condition: service_healthy
+    build:
+      context: ../../SlicesMrs.Backend
+    #image: slices-ri/mrs-backend:latest
+    environment:
+      ASPNETCORE_ConnectionStrings__DefaultConnection: "Host=database;Database=mrs_backend;Username=mrs_backend;Password=${MCR_C_DB_UP_BACKEND};"
+      ASPNETCORE_App__Auth__OidcMetadataAddress: "http://idp:8080/realms/slices/.well-known/openid-configuration"
+      ASPNETCORE_App__Auth__OidcMetadataRequireHttps: 'false'
+      ASPNETCORE_App__Auth__OidcAudience: slices-mrs-backend
+      ASPNETCORE_App__Auth__SwaggerAuthorizationUrl: "${MRS_C_IDP_ORIGIN}/realms/slices/protocol/openid-connect/auth"
+      ASPNETCORE_App__Auth__SwaggerTokenUrl: "${MRS_C_IDP_ORIGIN}/realms/slices/protocol/openid-connect/token"
+      ASPNETCORE_App__Auth__SwaggerUiClientId: slices-mrs-backend-swagger
+      ASPNETCORE_App__Auth__SwaggerUiClientRealm: slices
+      ASPNETCORE_App__Auth__SwaggerUiUsePkce: 'false'
+      ASPNETCORE_App__AutoMigrateDb: 'true'
+    ports:
+      - published: '${MRS_C_BACKEND_PORT}'
+        target: 80
+
+  portal:
+    build:
+      context: ../../SlicesMrs.Spa
+    #image: slices-ri/mrs-portal:latest
+    # Important: for NG_APP_ variables escape the following characters if used: ` ' "
+    environment:
+      NG_APP_OIDC_AUTHORITY: "${MRS_C_IDP_ORIGIN}/realms/slices"
+      NG_APP_OIDC_CLIENT_ID: slices-mrs-spa
+      NG_APP_MY_ACCOUNT_HREF: "${MRS_C_IDP_ORIGIN}/realms/slices/account"
+      NG_APP_BACKEND_API_BASE: "${MRS_C_BACKEND_ORIGIN}"
+    ports:
+      - published: '${MRS_C_PORTAL_PORT}'
+        target: 80
+
+  idp:
+    depends_on:
+      database:
+        condition: service_healthy
+    image: quay.io/keycloak/keycloak:26.0.0
+    command: start-dev --import-realm --hostname-strict=false --hostname=localhost
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: database
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${MCR_C_DB_UP_KEYCLOAK}
+      KC_DB_URL_DATABASE: keycloak
+
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: ${MRS_C_KEYCLOAK_ADMIN_PASSWORD}
+
+      KC_PROXY: edge
+      KC_HTTP_ENABLED: true
+
+      KCRI_BACKEND_ORIGIN: "${MRS_C_BACKEND_ORIGIN}"
+      KCRI_PORTAL_ORIGIN: "${MRS_C_PORTAL_ORIGIN}"
+    volumes:
+      - source: '../containers/keycloak/slices.realm.json'
+        target: '/opt/keycloak/data/import/slices.realm.json'
+        read_only: true
+        type: 'bind'
+    ports:
+      - published: '${MRS_C_IDP_PORT}'
+        target: 8080
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    ports:
+      - published: ${MRS_C_PGADMIN_PORT}
+        target: 80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin1@example.com
+      PGADMIN_DEFAULT_PASSWORD: ${MRS_C_PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  pgadmin_data:
 ```
 
 7. Démarrage minimal pour le Keyloack :
@@ -75,7 +168,21 @@ Utilisateur : admin
 Mot de passe : admin123 (via .env → KC_BOOTSTRAP_ADMIN_PASSWORD)
 ```
 
-7. Une fois connecté à Keycloak, lancer les autres containers :
+7. Une fois connecté à Keycloak :
+
+Selectionner SLICES
+
+Client
+Ajout d'un client
+
+
+Realm settings 
+Frontend URL 
+```bash
+http://localhost:9003
+```
+
+, lancer les autres containers :
 ```bash
 docker compose up -d --build backend portal pgadmin
 ```
