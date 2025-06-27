@@ -228,3 +228,8 @@ docker ps
 Bouton `Authorize` et se connecter avec le client.
 
 On est alors authentifié sur le swaguer.
+
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+## ÉTAPE 2 — 
