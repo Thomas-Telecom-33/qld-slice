@@ -2,7 +2,7 @@
 
 ═══════════════════════════════════════════════════════════════════════════════════
 
-## ÉTAPE 1 — Installations nécessaires
+## ÉTAPE 1 — Installations et configurations nécessaires
 
 ### 1.1 Cloner le dépôt
 ```bash
