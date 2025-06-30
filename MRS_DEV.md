@@ -186,18 +186,25 @@ Mot de passe : admin123 (via .env)
 Ajout d'un client : 
 
 Clients > Create Client
-Client ID : `slices-mrs-backend-swagger`
-Client Auth : `ON`
-Root URL : `http://localhost:9001`
-Valid redirect URIs : `http://localhost:9001/swagger/oauth2-redirect.html`
-Web origins : `+`
-Puis save.
+>
+> Client ID : `slices-mrs-backend-swagger`
+> 
+> Client Auth : `ON`
+> 
+> Root URL : `http://localhost:9001`
+> 
+> Valid redirect URIs : `http://localhost:9001/swagger/oauth2-redirect.html`
+> 
+> Web origins : `+`
+> 
+> Save.
 
 Le client est alors crée.
 
 On peut récupérer son mot de passe dans la catégorie `Credentials`.
 
 - Puis aller dans Realm settings :
+
 Frontend URL 
 ```bash
 http://localhost:9003
