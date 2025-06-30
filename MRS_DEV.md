@@ -234,6 +234,8 @@ docker ps
 ### 1.8 Accès au swaguer [http://localhost:9001/](http://localhost:9001/swagger/index.html) :
 Bouton `Authorize` et se connecter avec le client.
 
+On est redirigé vers Keycloak où l'on doit se connecter avec un user que l'on a créé sous Keycloack.
+
 On est alors authentifié sur le swaguer.
 
 
