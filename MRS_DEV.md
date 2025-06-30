@@ -167,14 +167,14 @@ volumes:
 ```bash
 docker compose up -d database idp
 ```
-Attends que Keycloak soit disponible sur http://localhost:9003. Tu verras apparaître une page demandant la création de l’utilisateur admin temporaire.
+Attends que Keycloak soit disponible sur http://localhost:9003. Une page demandant la création de l’utilisateur admin temporaire apparaît.
 
-Renseigne :
+Renseigner :
 ```python
 Utilisateur : admin
 ```
 ```python
-Mot de passe : admin123 (via .env → KC_BOOTSTRAP_ADMIN_PASSWORD)
+Mot de passe : admin123 (via .env)
 ```
 
 ---
