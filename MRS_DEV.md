@@ -221,9 +221,9 @@ Pour vérifier que tout est build :
 ```bash
 docker ps
 ```
-> Backend API	9001	http://localhost:9001	
+> Backend API	9001	[http://localhost:9001](http://localhost:9001/swagger/index.html)	
 >
-> Frontend SPA	9002	http://localhost:9002	
+> Frontend SPA	9002	[http://localhost:9002](http://localhost:9002/app/home)
 > 
 > Keycloak (IDP)	9003	http://localhost:9003	
 > 
@@ -231,7 +231,7 @@ docker ps
 
 ---
 
-### 1.8 Accès au swaguer http://localhost:9001/ :
+### 1.8 Accès au swaguer [http://localhost:9001/](http://localhost:9001/swagger/index.html) :
 Bouton `Authorize` et se connecter avec le client.
 
 On est alors authentifié sur le swaguer.
