@@ -1,4 +1,4 @@
-# SLICES BI Blueprint integration of MRS
+# SLICES BI Blueprint integration of MRS LOCALHOST
 
 ═══════════════════════════════════════════════════════════════════════════════════
 
