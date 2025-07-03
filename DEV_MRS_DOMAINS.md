@@ -208,17 +208,17 @@ On est alors connecté sur le portail.
 
 ### 1.10 Accéder au swagger
 
-#### Modifier le client mrs-swagger dans Keycloack :
-- Client ID : `mrs-swagger`
+#### Créer le client slices-mrs-backend-swagger dans Keycloack :
+- Client ID : `slices-mrs-backend-swagger`
 - Root URL : `https://backend.mrs.local/swagger`
-- Valid redirect URIs : `https://backend.mrs.local/swagger/*`
-- Web origins : `https://backend.mrs.local`
+- Valid redirect URIs : `https://backend.mrs.local/swagger/oauth2-redirect.html`
+- Web origins : `+`
 
 - Sur la navigateur web, accéder à `https://backend.mrs.local/swagger/`
 
 On a alors accès au swagger.
 
-- Cliquer sur le bouton Authorize, et se connecter avec mrs-swagger, sans mot de passe.
+- Cliquer sur le bouton Authorize, et se connecter avecle client créé slices-mrs-backend-swagger.
 
 On est alors authorisé à utiliser le swagger.
 
