@@ -213,7 +213,8 @@ On est alors connecté sur le portail.
 - Root URL : `https://backend.mrs.local/swagger`
 - Valid redirect URIs : `https://backend.mrs.local/swagger/oauth2-redirect.html`
 - Web origins : `+`
-
+  
+Puis :
 - Sur la navigateur web, accéder à `https://backend.mrs.local/swagger/`
 
 On a alors accès au swagger.
