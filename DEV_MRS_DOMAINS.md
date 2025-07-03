@@ -178,7 +178,7 @@ Sous users > Add user et lui donner un mot de passe dans credentials.
 
 #### Modifier le realm settings :
 
-Frontend URL : https://keycloak.mrs.local
+Frontend URL : `https://keycloak.mrs.local`
 
 ---
 
@@ -188,11 +188,11 @@ Frontend URL : https://keycloak.mrs.local
 
 Sous clients > mrs-spa modifier :
 
-- Client ID : slices-mrs-spa
-- Root URL : https://portal.mrs.local
-- Valid redirect URIs : https://portal.mrs.local/*
-- Valid post logout redirect URIs : https://portal.mrs.local/*
-- Web origins : https://portal.mrs.local
+- Client ID : `slices-mrs-spa`
+- Root URL : `https://portal.mrs.local`
+- Valid redirect URIs : `https://portal.mrs.local/*`
+- Valid post logout redirect URIs : `https://portal.mrs.local/*`
+- Web origins : `https://portal.mrs.local`
   
 Sur la navigateur web, accéder à `https://portal.mrs.local/`
 
@@ -209,10 +209,10 @@ On est alors connecté sur le portail.
 ### 1.10 Accéder au swagger
 
 #### Modifier le client mrs-swagger dans Keycloack :
-- Client ID : mrs-swagger
-- Root URL : https://backend.mrs.local/swagger
-- Valid redirect URIs : https://backend.mrs.local/swagger/*
-- Web origins : https://backend.mrs.local
+- Client ID : `mrs-swagger`
+- Root URL : `https://backend.mrs.local/swagger`
+- Valid redirect URIs : `https://backend.mrs.local/swagger/*`
+- Web origins : `https://backend.mrs.local`
 
 - Sur la navigateur web, accéder à `https://backend.mrs.local/swagger/`
 
