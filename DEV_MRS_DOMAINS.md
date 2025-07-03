@@ -214,6 +214,13 @@ On est alors connecté sur le portail.
 - Valid redirect URIs : https://backend.mrs.local/swagger/*
 - Web origins : https://backend.mrs.local
 
-Sur la navigateur web, accéder à `https://backend.mrs.local/swagger/`
+- Sur la navigateur web, accéder à `https://backend.mrs.local/swagger/`
 
 On a alors accès au swagger.
+
+- Cliquer sur le bouton Authorize, et se connecter avec mrs-swagger, sans mot de passe.
+
+On est alors authorisé à utiliser le swagger.
+
+
+
