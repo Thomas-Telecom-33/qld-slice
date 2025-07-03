@@ -166,4 +166,11 @@ Sur le navigateur web, accéder à `https://keycloak.mrs.local/`
 
 Se connecter avec le compte `admin` et le mot de passe définie dans le `.env`
 
+Changer de realm et choisir el realm `slices`.
+
+---
+
+Créer un user :
+
+Sous users > Add user et lui donner un mot de passe dans credentials.
 
