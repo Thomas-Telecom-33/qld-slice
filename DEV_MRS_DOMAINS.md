@@ -170,7 +170,52 @@ Changer de realm et choisir el realm `slices`.
 
 ---
 
-Créer un user :
+#### Créer un user :
 
 Sous users > Add user et lui donner un mot de passe dans credentials.
 
+---
+
+#### Modifier le realm settings :
+
+Frontend URL : https://keycloak.mrs.local
+
+---
+
+---
+
+### 1.9 Accéder au portail
+
+#### Modifier le client mrs-spa dans Keycloack :
+
+Sous clients > mrs-spa modifier :
+
+- Client ID : slices-mrs-spa
+- Root URL : https://portal.mrs.local
+- Valid redirect URIs : https://portal.mrs.local/*
+- Valid post logout redirect URIs : https://portal.mrs.local/*
+- Web origins : https://portal.mrs.local
+  
+Sur la navigateur web, accéder à `[https://portal.mrs.local/](https://portal.mrs.local/)`
+
+Puis cliquer sur login.
+
+On rentre les identifiants du user crée sous Keycloack.
+
+Puis on remplit les informations demandées.
+
+On est alors connecté sur le portail.
+
+---
+
+### 1.10 Accéder au swagger
+
+#### Modifier le client mrs-swagger dans Keycloack :
+- Client ID : mrs-swagger
+- Root URL : https://backend.mrs.local/swagger
+- Valid redirect URIs : https://backend.mrs.local/swagger/*
+- Web origins : https://backend.mrs.local
+
+Sur la navigateur web, accéder à `[https://portal.mrs.local/](https://backend.mrs.local/swagger/)`
+
+On a alors accès au swagger.
