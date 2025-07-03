@@ -182,8 +182,6 @@ Frontend URL : https://keycloak.mrs.local
 
 ---
 
----
-
 ### 1.9 Accéder au portail
 
 #### Modifier le client mrs-spa dans Keycloack :
