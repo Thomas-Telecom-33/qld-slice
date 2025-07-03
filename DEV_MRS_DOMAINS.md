@@ -196,7 +196,7 @@ Sous clients > mrs-spa modifier :
 - Valid post logout redirect URIs : https://portal.mrs.local/*
 - Web origins : https://portal.mrs.local
   
-Sur la navigateur web, accéder à `[https://portal.mrs.local/](https://portal.mrs.local/)`
+Sur la navigateur web, accéder à `https://portal.mrs.local/`
 
 Puis cliquer sur login.
 
@@ -216,6 +216,6 @@ On est alors connecté sur le portail.
 - Valid redirect URIs : https://backend.mrs.local/swagger/*
 - Web origins : https://backend.mrs.local
 
-Sur la navigateur web, accéder à `[https://portal.mrs.local/](https://backend.mrs.local/swagger/)`
+Sur la navigateur web, accéder à `https://backend.mrs.local/swagger/`
 
 On a alors accès au swagger.
