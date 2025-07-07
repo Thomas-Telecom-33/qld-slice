@@ -220,6 +220,8 @@ On a alors accès au swagger.
 
 Cliquer sur le bouton `Authorize`, et se connecter avec le client créé slices-mrs-backend-swagger.
 
+On est alors redirigé vers le portail `Keycloack` où l'on se conecte avec le user crée.
+
 On est alors authorisé à utiliser le swagger.
 
 
