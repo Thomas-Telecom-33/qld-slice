@@ -242,3 +242,46 @@ On est alors authentifié sur le swaguer.
 ═══════════════════════════════════════════════════════════════════════════════════
 
 ## ÉTAPE 2 — 
+
+
+./SlicesMrs.Backend/Features/Identity/ConfigureJwtBearerOptions.cs
+
+
+```python
+using System.Net.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+
+namespace SlicesMrs.Backend.Features.Identity;
+
+[AutoConstructor]
+internal partial class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
+{
+    private readonly IOptions<AppAuthOptions> _authOptions;
+
+    public void Configure(JwtBearerOptions options)
+    {
+        Configure(Options.DefaultName, options);
+    }
+
+    public void Configure(string? name, JwtBearerOptions options)
+    {
+        if (name != JwtBearerDefaults.AuthenticationScheme) return;
+
+        AppAuthOptions authOptions = _authOptions.Value;
+
+        options.MetadataAddress = authOptions.OidcMetadataAddress;
+        options.RequireHttpsMetadata = authOptions.OidcMetadataRequireHttps;
+        options.Audience = authOptions.OidcAudience;
+
+        if (!authOptions.OidcMetadataRequireHttps)
+        {
+            options.BackchannelHttpHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+        }
+    }
+}
+```
+
