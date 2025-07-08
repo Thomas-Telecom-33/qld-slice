@@ -225,4 +225,10 @@ On est alors redirigé vers le portail `Keycloack` où l'on se conecte avec le u
 On est alors authorisé à utiliser le swagger.
 
 
+Création du scope mrs-backend-aud
+Mapper type  Audience
+Included Custom Audience   mrs-backend
+Add to access token ON
+Add to token introspection ON
 
+L'ajouter au client slices-mrs-backend-swagger
