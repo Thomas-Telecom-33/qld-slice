@@ -55,6 +55,7 @@ Placer en fin de fichier :
 127.0.0.1 keycloak.mrs.local
 127.0.0.1 backend.mrs.local
 127.0.0.1 portal.mrs.local
+127.0.0.1 pgadmin.mrs.local
 ```
 
 ---
