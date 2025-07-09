@@ -150,23 +150,4 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 
 ═══════════════════════════════════════════════════════════════════════════════════
 
-## 🌐 PHASE 6 — Interface Frontend (UI)
-x²
-Front-end avec spécifications à venir.
-
-TODO :
-> clouds.yaml :
-  - Chaque utilisateur doit téléverser son clouds.yaml une seule fois via le frontend.
-  - Ce fichier est stocké côté backend, lié à son compte (base de données ou fichier privé).
-  - Lors d'une action (ex: création de VM), le backend utilise automatiquement ce fichier.
-    
-═══════════════════════════════════════════════════════════════════════════════════
-## 🔒 PHASE 6 — Sécurité, Permissions et Logs
-═══════════════════════════════════════════════════════════════════════════════════
-## 🚀 PHASE 7 — Déploiement & Documentation finale
-
-- Script de lancement global backend/frontend
-- USER.md
-
-  
-═══════════════════════════════════════════════════════════════════════════════════
+A suivre...
