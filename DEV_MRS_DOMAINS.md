@@ -275,17 +275,13 @@ L'ajouter au client slices-mrs-backend-swagger
 }
 ```
 
+═══════════════════════════════════════════════════════════════════════════════════
+
 ## ÉTAPE 2 — Tests du SWAGGER
 
-### 2.1 Composition du swagger
-
-
-
-
-### 2.2 DigitalObjects routes
 Des exemples de payloads sont à disposition sous `/mrs/payloads`. 
 
-#### 2.2.1 POST
+#### POST :
 
 Exemple de payload pour la création d'une VM Openstack :
 ```python
@@ -337,7 +333,9 @@ Exemple de payload pour la création d'une VM Openstack :
 
 ```
 
-L'external identifier est alors généré automatiquement.
+L'`external identifier` est alors généré automatiquement.
 
-On peut alors utiliser les autres routes pour DELETE, PUT et GET.
+On peut alors utiliser les autres routes pour `DELETE`, `PUT` et `GET`.
+
+═══════════════════════════════════════════════════════════════════════════════════
 
