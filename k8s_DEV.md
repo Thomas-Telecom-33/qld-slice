@@ -209,3 +209,20 @@ kubectl get pods
 Résultat : le pod ne figure plus dans la liste.
 
 ═══════════════════════════════════════════════════════════════════════════════════
+
+## Conclusion
+
+Le backend SLICES est désormais compatible avec `Kubernetes`.
+
+#### Grâce à l’intégration mise en place, le système est capable de :
+
+- `Créer` dynamiquement des pods sur demande,
+
+- `Supprimer` proprement des pods existants,
+
+- `Suivre` en temps réel l’état de chaque tâche grâce à Redis et TaskIQ.
+
+
+#### Cette architecture repose sur Kubectl.
+
+Il est désormais facile d’ajouter de nouvelles fonctionnalités.
