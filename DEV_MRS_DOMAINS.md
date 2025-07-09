@@ -224,7 +224,9 @@ On est alors redirigé vers le portail `Keycloack` où l'on se conecte avec le u
 
 On est alors authorisé à utiliser le swagger.
 
+Problèmes rencontrés et solution apportées :
 
+1. 
 Création du scope mrs-backend-aud
 Mapper type  Audience
 Included Custom Audience   mrs-backend
@@ -232,3 +234,27 @@ Add to access token ON
 Add to token introspection ON
 
 L'ajouter au client slices-mrs-backend-swagger
+
+2. Modification de appsettings.json :
+```python
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "App": {
+    "Auth": {
+      "OidcMetadataAddress": "https://keycloak.mrs.local/realms/slices/.well-known/openid-configuration",
+      "OidcMetadataRequireHttps": false,
+      "OidcAudience": "mrs-backend",
+      "SwaggerAuthorizationUrl": "https://keycloak.mrs.local/realms/slices/protocol/openid-connect/auth",
+      "SwaggerTokenUrl": "https://keycloak.mrs.local/realms/slices/protocol/openid-connect/token",
+      "SwaggerUiClientId": "slices-mrs-backend-swagger",
+      "SwaggerUiClientRealm": "slices"
+    }
+  }
+}
+```
