@@ -258,3 +258,70 @@ L'ajouter au client slices-mrs-backend-swagger
   }
 }
 ```
+
+## ÉTAPE 2 — Tests du SWAGGER
+
+### 2.1 Composition du swagger
+
+
+
+
+### 2.2 DigitalObjects routes
+Des exemples de payloads sont à disposition sous `/mrs/payloads`. 
+
+#### 2.2.1 POST
+
+Exemple de payload pour la création d'une VM Openstack :
+```python
+{
+  "$type": "Base",
+  "identifier": "vm2",
+  "name": "VM2",
+  "description": "Virtual Machine",
+  "resourceType": "Base",
+  "createdAt": "2025-07-09T00:00:00Z",
+  "version": "1.0",
+  "creators": [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "j.doe@example.com",
+      "organization": "TestOrg",
+      "website": "http://localhost"
+    }
+  ],
+  "contributors": [],
+  "accessType": "Remote",
+  "accessMode": "Free",
+  "accessRights": "Open access",
+  "rights": "Standard usage rights apply.",
+  "license": "",
+  "licenseUri": "",
+  "primaryLanguages": ["en"],
+  "otherLanguages": [],
+  "keywords": ["vm", "virtual machine", "test"],
+  "subjects": ["computing"],
+  "requiredObjects": [],
+  "relatedObjects": [],
+  "contact": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "j.doe@example.com",
+    "organization": "TestOrg",
+    "website": "http://localhost"
+  },
+  "publicContact": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "j.doe@example.com",
+    "organization": "TestOrg",
+    "website": "http://localhost"
+  }
+}
+
+```
+
+L'external identifier est alors généré automatiquement.
+
+On peut alors utiliser les autres routes pour DELETE, PUT et GET.
+
