@@ -45,6 +45,7 @@ MCR_C_DB_UP_KEYCLOAK=
 
 ### 1.3 Ajouter les noms de domaines :
 
+### 1.3.1 Sur Linux :
 Se rendre dans :
 ```bash
 sudo nano /etc/hosts
@@ -56,6 +57,20 @@ Placer en fin de fichier :
 127.0.0.1 backend.mrs.local
 127.0.0.1 portal.mrs.local
 127.0.0.1 pgadmin.mrs.local
+```
+
+---
+
+### 1.3.1 Sur Windows :
+Excécuter Bloc-note en tant qu'administrateur.
+
+Ouvrir C:\Windows\System32\drivers\etc\hosts et placer :
+
+```bash
+@IP keycloak.mrs.local
+@IP backend.mrs.local
+@IP portal.mrs.local
+@IP pgadmin.mrs.local
 ```
 
 ---
