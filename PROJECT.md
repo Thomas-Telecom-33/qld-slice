@@ -133,32 +133,25 @@ We would like to add a software interface compliant with the SLICES-RI (Scientif
 
 ### ✅ Avancement
 
-Étape 1 — Analyse technique
+Étape 1 — Analyse technique & installation et configurations locales : OK
 
-Étape 2 — Préparation du client MRS
+Étape 2 — Installation et configurations sur la VM, cohabitation avec le backend existant : TODO
 
-Étape 3 — Génération du payload
+Étape 3 — Préparation du client MRS : TODO
 
-Étape 4 — Intégration dans compute_resource.py
+Étape 4 — Génération du payload : TODO
 
-Étape 5 — Test et validation
+Étape 5 — Intégration dans compute_resource.py : TODO
 
-
+Étape 6 — Test et validation : TODO
 
 ### 📦 Livrables
-- Un fichier de configuration MRS (URL, audience MRS, etc.)
-- Un module mrs_client.py ou équivalent dans utils/ ou services/.
-- Appels MRS automatiques depuis les tâches de création (create_compute_resource)
-- Validation manuelle de la présence des métadonnées dans l’instance MRS.
-- Un MRS_DEV.md décrivant l’intégration.
-- (optionnel) Endpoint d’exploration interne /metadata/ pour tester localement les payloads.
 
 
+═══════════════════════════════════════════════════════════════════════════════════
 
-
-
-
-## 🌐 PHASE 5 — Interface Frontend (UI)
+## 🌐 PHASE 6 — Interface Frontend (UI)
+x²
 Front-end avec spécifications à venir.
 
 TODO :
