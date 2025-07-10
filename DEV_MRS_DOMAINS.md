@@ -127,9 +127,15 @@ networks:
       KEYCLOAK_ADMIN_PASSWORD: ${MRS_C_KEYCLOAK_ADMIN_PASSWORD}
 ```
 
+Et modification du port de Databse :
+```python
+ ports:
+      - "5433:5432" 
+```
+
 ---
 
-### 1.4 Modification du dockerfile :
+### 1.5 Modification du dockerfile :
 
 Se rendre dans :
 ```bash
@@ -146,7 +152,7 @@ FROM quay.io/keycloak/keycloak:26.2.5
 
 ---
 
-### 1.5 Lancement des containers
+### 1.6 Lancement des containers
 
 Faire :
 ```bash
@@ -176,7 +182,7 @@ docker ps
 
 ---
 
-### 1.8 Accès à Keycloack
+### 1.7 Accès à Keycloack
 
 Sur le navigateur web, accéder à `https://keycloak.mrs.local/`
 
@@ -198,7 +204,7 @@ Frontend URL : `https://keycloak.mrs.local`
 
 ---
 
-### 1.9 Accéder au portail
+### 1.8 Accéder au portail
 
 #### Modifier le client mrs-spa dans Keycloack :
 
@@ -222,7 +228,7 @@ On est alors connecté sur le portail.
 
 ---
 
-### 1.10 Accéder au swagger
+### 1.9 Accéder au swagger
 
 #### Créer le client slices-mrs-backend-swagger dans Keycloack :
 - Client ID : `slices-mrs-backend-swagger`
