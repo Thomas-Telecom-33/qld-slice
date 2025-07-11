@@ -2,6 +2,21 @@
 
 ═══════════════════════════════════════════════════════════════════════════════════
 
+## ÉTAPE 0  — Architecture
+
+#### 2 VMs :
+- VM MRS : 10.98.1.217
+- VM BI Slices : 10.98.1.239
+Toutes les 2 sont dans le même réseaux.
+
+##### Vérification de la possibilité :
+- Ping entre les IPs (10.98.1.239 vers 10.98.1.217)
+- Ajout des entrées dans /etc/hosts
+- ping backend.mrs.local OK
+- curl -k https://backend.mrs.local/reporting/charts/objects-by-type
+Endpoints du swagguer répondent.
+
+
 ## ÉTAPE 1 — Installations et configurations nécessaires
 
 ### 1.1 Cloner le dépôt
@@ -45,7 +60,7 @@ MCR_C_DB_UP_KEYCLOAK=
 
 ### 1.3 Ajouter les noms de domaines :
 
-### 1.3.1 Sur Linux :
+### 1.3.1 Sur VM MRS :
 Se rendre dans :
 ```bash
 sudo nano /etc/hosts
@@ -61,31 +76,26 @@ Placer en fin de fichier :
 
 ---
 
+### 1.3.1 Sur VM Slices :
+```
+10.98.1.217 keycloak.mrs.local
+10.98.1.217 backend.mrs.local
+10.98.1.217 portal.mrs.local
+10.98.1.217 pgadmin.mrs.local
+```
+
+---
+
 ### 1.3.1 Sur Windows :
 Excécuter Bloc-note en tant qu'administrateur.
 
 Ouvrir C:\Windows\System32\drivers\etc\hosts et placer :
 
 ```bash
-@IP keycloak.mrs.local
-@IP backend.mrs.local
-@IP portal.mrs.local
-@IP pgadmin.mrs.local
-```
-
----
-
-Se rendre dans :
-```bash
-/mrs/infra/traefik
-```
-
-Et y ajouter l'option external: true :
-```python
-networks:
-  traefik_services:
-    external: true
-    name: traefik_services
+10.98.1.217 keycloak.mrs.local
+10.98.1.217 backend.mrs.local
+10.98.1.217 portal.mrs.local
+10.98.1.217 pgadmin.mrs.local
 ```
 
 ---
