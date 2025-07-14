@@ -137,11 +137,6 @@ Ouvrir C:\Windows\System32\drivers\etc\hosts et placer :
       KEYCLOAK_ADMIN_PASSWORD: ${MRS_C_KEYCLOAK_ADMIN_PASSWORD}
 ```
 
-Et modification du port de Databse :
-```python
- ports:
-      - "5433:5432" 
-```
 
 ---
 
@@ -258,12 +253,12 @@ On est alors authorisé à utiliser le swagger.
 
 Problèmes rencontrés et solution apportées :
 
-1. 
-Création du scope mrs-backend-aud
-Mapper type  Audience
-Included Custom Audience   mrs-backend
-Add to access token ON
-Add to token introspection ON
+1. Création du scope mrs-backend-aud :
+
+- Mapper type : Audience
+- Included Custom Audience : mrs-backend
+- Add to access token : ON
+- Add to token introspection : ON
 
 L'ajouter au client slices-mrs-backend-swagger
 
