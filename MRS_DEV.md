@@ -573,7 +573,6 @@ Exemple de payload pour la création d'une VM Openstack :
     "website": "http://localhost"
   }
 }
-
 ```
 
 L'`external identifier` est alors généré automatiquement.
@@ -581,4 +580,92 @@ L'`external identifier` est alors généré automatiquement.
 On peut alors utiliser les autres routes pour `DELETE`, `PUT` et `GET`.
 
 ═══════════════════════════════════════════════════════════════════════════════════
+
+## ÉTAPE 3 : Intégration Backend BI :
+
+### 3.1 Modification du client `slices-mrs-backend-swagger`:
+
+- Ajout d'un mot de passe
+- Activation du Service accounts roles
+
+#### TEST d'obtention d'un token :
+```bash
+curl -k -X POST "https://keycloak.mrs.local/realms/slices/protocol/openid-connect/token" \
+>   -H "Content-Type: application/x-www-form-urlencoded" \
+>   -d "grant_type=client_credentials" \
+>   -d "client_id=slices-mrs-backend-swagger" \
+>   -d "client_secret=8GFdRI11KRJSONLCkosJaZDBZx7UeBEt"
+```
+
+#### TEST d'un POST  :
+```bash
+curl -k -X POST https://backend.mrs.local/v0.2/digital-objects \
+  -H "Authorization: Bearer TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "$type": "Base",
+    "identifier": "vm",
+    "name": "VM",
+    "description": "Virtual Machine",
+    "resourceType": "Base",
+    "createdAt": "2025-07-09T00:00:00Z",
+    "version": "1.0",
+    "creators": [
+      {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "j.doe@example.com",
+        "organization": "TestOrg",
+        "website": "http://localhost"
+      }
+    ],
+    "contributors": [],
+    "accessType": "Remote",
+    "accessMode": "Free",
+    "accessRights": "Open access",
+    "rights": "Standard usage rights apply.",
+    "license": "",
+    "licenseUri": "",
+    "primaryLanguages": ["en"],
+    "otherLanguages": [],
+    "keywords": ["vm", "virtual machine", "test"],
+    "subjects": ["computing"],
+    "requiredObjects": [],
+    "relatedObjects": [],
+    "contact": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "j.doe@example.com",
+      "organization": "TestOrg",
+      "website": "http://localhost"
+    },
+    "publicContact": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "j.doe@example.com",
+      "organization": "TestOrg",
+      "website": "http://localhost"
+    }
+  }
+```
+
+On peut alors retrouver l'object crée sur MRS-SPA.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
