@@ -651,21 +651,32 @@ curl -k -X POST https://backend.mrs.local/v0.2/digital-objects \
 
 On peut alors retrouver l'object crée sur MRS-SPA.
 
+---
+
+### 3.2 Création de mrs_backend.py :
+Fichier ajouté pour encapsuler toute la logique MRS côté backend BI.
+
+Responsabilités :
+- Récupération d’un token Keycloak via le client slices-mrs-backend-swagger.
+- Construction du payload MRS à partir d’un objet ComputeResource.
+- POST vers l’API MRS https://backend.mrs.local/v0.2/digital-objects.
+
+---
+
+### 3.3 Ajouts de l'appel dans tasks/compute_resources :
+Ajout dans la tâche create_compute_resource() après la création de la VM des appels nécessaires définis dans  mrs_backend.py.
 
 
+---
 
+### 3.4 Tests finaux
 
+Utiliser le script fourni request-resources.sh :  
+```bash
+./example/request-resources.sh <exp_name>
+```
 
-
-
-
-
-
-
-
-
-
-
-
+On a alors la ressource créee correctement et ajoutée au MRS.
+Vérifications possibles depuis mrs-spa.
 
 
