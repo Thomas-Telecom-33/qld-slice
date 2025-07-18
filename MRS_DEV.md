@@ -664,7 +664,7 @@ Responsabilités :
 ---
 
 ### 3.3 Ajouts de l'appel dans tasks/compute_resources :
-Ajout dans la tâche create_compute_resource() après la création de la VM des appels nécessaires définis dans  mrs_backend.py.
+Ajout dans la tâche create_compute_resource() après la création de la VM des appels nécessaires définis dans mrs_backend.py.
 
 
 ---
